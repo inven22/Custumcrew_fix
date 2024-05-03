@@ -2,13 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:asistant_rumah/home/screens/SeeAll.dart';
+import 'package:asistant_rumah/home/screens/pesan.dart';
 import 'package:asistant_rumah/home/res/lists.dart';
 import 'package:asistant_rumah/home/widgets/text_widget.dart' ;
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:asistant_rumah/home/screens/account_screen.dart';
+import 'Profile.dart';
+import 'pesan.dart';
+import 'More_art.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
+  
+  get image => null;
 
   @override
   State<Home> createState() => _HomeState();
@@ -67,7 +74,7 @@ class _HomeState extends State<Home> {
                         children: [
                           TextWidget("Selamat datang", 17, Colors.black.withOpacity(.7),
                               FontWeight.bold),
-                          TextWidget("Kiseki", 25, Colors.black, FontWeight.bold),
+                          TextWidget("Ahmad", 25, Colors.black, FontWeight.bold),
                         ],
                       ),
                       const Icon(Icons.phonelink_ring)
@@ -150,7 +157,7 @@ class _HomeState extends State<Home> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextWidget("List Asistant Home", 25, Colors.black.withOpacity(.8), FontWeight.bold,letterSpace: 0,),
+                      TextWidget("Rekomendasi", 25, Colors.black.withOpacity(.8), FontWeight.bold,letterSpace: 0,),
                       InkWell(
                         onTap: () async
                           {
@@ -163,34 +170,70 @@ class _HomeState extends State<Home> {
                             // },);
                             await Future.delayed(const Duration(milliseconds: 500));
                             await Navigator.push(context, MaterialPageRoute(builder:  (context) {
-                              return SeeAll();
+                              return moreart();
                             },));
 
                             setState(() {
                               animator();
                             });
                           },
-                          child: TextWidget("Lihat semua", 15, Colors.blue.shade600.withOpacity(.8), FontWeight.bold,letterSpace: 0,)),
+                          child: TextWidget("Lihat semua art", 15, Colors.blue.shade600.withOpacity(.8), FontWeight.bold,letterSpace: 0,)),
                     ],
                 ),
               ),
                   )),
               doctorList(),
               Align(
-                alignment: Alignment.bottomCenter,
-                  child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 400),
-                    opacity: opacity,
-                    child: CurvedNavigationBar(
-
-                        backgroundColor: Colors.white,
-                        items: const [
-                          Icon(Icons.home_filled,color: Colors.blue,size: 30,),
-                          Icon(Icons.calendar_month_rounded,color: Colors.black,size: 30,),
-                          Icon(Icons.whatshot_outlined,color: Colors.black,size: 30,),
-                          Icon(Icons.account_circle_outlined,color: Colors.black,size: 30,),
-                        ]),
-                  ))
+  alignment: Alignment.bottomCenter,
+  child: AnimatedOpacity(
+    duration: const Duration(milliseconds: 400),
+    opacity: opacity,
+    child: CurvedNavigationBar(
+      backgroundColor: Colors.white,
+      items: [
+        GestureDetector(
+          onTap: () {
+           
+          },
+          child: Icon(Icons.home_filled, color: Colors.blue, size: 30),
+        ),
+        GestureDetector(
+          onTap: () {
+            // Tambahkan aksi Anda untuk ikon kalender di sini
+            // Contoh: Navigator.pushNamed(context, '/calendar');
+          },
+          child: Icon(Icons.calendar_month_rounded, color: Colors.black, size: 30),
+        ),
+        GestureDetector(
+          onTap: () {
+             Timer(const Duration(milliseconds: 600), () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>pesan(),
+                    ));
+              });
+          },
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 400),
+            opacity: opacity,
+            child: Icon(Icons.message, color: Colors.black, size: 30),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+             Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>AccountScreen(),
+                    ));
+          },
+          child: Icon(Icons.account_circle_outlined, color: Colors.black, size: 30),
+        ),
+      ],
+    ),
+  ),
+)
 
             ],
           ),
@@ -202,36 +245,58 @@ class _HomeState extends State<Home> {
 
 
   Widget doctorList(){
-    return AnimatedPositioned(
-        top: position?460:550,
-        left: 20,
-        right: 20,
-        duration: const Duration(milliseconds: 400),
-        child: AnimatedOpacity(
-          duration: const Duration(milliseconds: 400),
-          opacity: opacity,
-          child: AnimatedOpacity(
-            opacity: opacity,
-            duration: const Duration(milliseconds: 300),
-            child: SizedBox(
-              height: 270,
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                child:
-                Column(
-                  children: [
-                    doctorCard(names[0], spacilality[0], images[0]),
-                    doctorCard(names[1], spacilality[1], images[1]),
-                    doctorCard(names[2], spacilality[2], images[2]),
-                  ],
+  return AnimatedPositioned(
+    top: position ? 460 : 550,
+    left: 20,
+    right: 20,
+    duration: const Duration(milliseconds: 400),
+    child: AnimatedOpacity(
+      duration: const Duration(milliseconds: 400),
+      opacity: opacity,
+      child: AnimatedOpacity(
+        opacity: opacity,
+        duration: const Duration(milliseconds: 300),
+        child: SizedBox(
+          height: 270,
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                      // {
+                      //    animator();
+                      //    await Future.delayed(const Duration(milliseconds: 400));
+                      //    var image;
+                      //    await Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(image: widget.image,name: widget.name,speciality: widget.specialist),));
+                      //     animator();
+                      // }
+                  },
+                  child: doctorCard(names[0], spacilality[0], images[0]),
                 ),
-
-              ),
+                GestureDetector(
+                  onTap: () {
+                    // Action when the second doctor card is tapped
+                    // You can navigate to a new screen or perform any other action
+                  },
+                  child: doctorCard(names[1], spacilality[1], images[1]),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    // Action when the third doctor card is tapped
+                    // You can navigate to a new screen or perform any other action
+                  },
+                  child: doctorCard(names[2], spacilality[2], images[2]),
+                ),
+              ],
             ),
           ),
-        )
-    );
-  }
+        ),
+      ),
+    ),
+  );
+}
+
   Widget doctorCard(String name,String specialist,AssetImage image){
     return Card(
       elevation: 2,
