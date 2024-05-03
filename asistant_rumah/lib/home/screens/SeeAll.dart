@@ -1,20 +1,22 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:asistant_rumah/home/screens/Home.dart';
-import 'package:asistant_rumah/home/widgets/text_widget.dart';
 import 'package:asistant_rumah/home/res/lists.dart';
+import 'package:asistant_rumah/home/widgets/text_widget.dart';
+import 'Oppointment.dart';
+class Profile extends StatefulWidget {
+  final AssetImage image;
+  final String name;
+  final String speciality;
+  const Profile({super.key,required this.image,required this.name,required this.speciality});
 
-import 'Chat.dart';
-
-class SeeAll extends StatefulWidget {
   @override
-  State<SeeAll> createState() => _SeeAllState();
+  State<Profile> createState() => _ProfileState();
 }
-
-class _SeeAllState extends State<SeeAll> {
+class _ProfileState extends State<Profile> {
+  var animate = false;
   var opacity = 0.0;
-  bool position=false;
+  late Size size;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -25,66 +27,223 @@ class _SeeAllState extends State<SeeAll> {
   }
 
   animator() {
-    if (opacity == 1) {
-      opacity = 0;
-      position=false;
-    } else {
+    if (opacity == 0.0) {
       opacity = 1;
-      position=true;
+      animate = true;
+    } else {
+      opacity = 0.0;
+      animate = false;
     }
     setState(() {});
   }
-  
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
         color: Colors.white,
-        padding: EdgeInsets.only(top: 70),
+        padding: const EdgeInsets.only(top: 60),
         height: size.height,
         width: size.width,
         child: Stack(
           children: [
             AnimatedPositioned(
-              duration: Duration(milliseconds: 400),
-              top: position ? 1 : 50,
-              left: 20,
-              right: 20,
-              child: upperRow(),
-            ),
-            AnimatedPositioned(
-                top: position ? 60 : 120,
-                right: 20,
-                left: 20,
-                duration: Duration(milliseconds: 300),
-                child: findDoctor()),
-            AnimatedPositioned(
-                top: position ? 390 : 450,
-                right: 20,
-                left: 20,
-                duration: Duration(milliseconds: 400),
+                top: 1,
+                right: animate ? -100 : -200,
+                duration: const Duration(milliseconds: 400),
                 child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 400),
                   opacity: opacity,
-                  duration: Duration(milliseconds: 400),
                   child: Container(
+                    height: size.height / 2,
                     width: size.width,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: widget.image, fit: BoxFit.cover)),
+                  ),
+                )),
+            AnimatedPositioned(
+                left: animate ? 1 : -100,
+                duration: const Duration(milliseconds: 400),
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 400),
+                  opacity: opacity,
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 80, left: 20),
+                    height: size.height / 2,
+                    width: size.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextWidget(
-                          "List Asistant",
-                          22,
+                          names[0],
+                          25,
                           Colors.black,
                           FontWeight.bold,
                           letterSpace: 0,
                         ),
+                        const SizedBox(
+                          height: 5,
+                        ),
                         TextWidget(
-                          "Lihat semua",
-                          14,
-                          Colors.blue.shade900,
+                          spacilality[0],
+                          15,
+                          Colors.black.withOpacity(.6),
                           FontWeight.bold,
+                          letterSpace: 0,
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        ),
+                        Row(
+                          children: [
+                            Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: const SizedBox(
+                                height: 60,
+                                width: 60,
+                                child: Center(
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.orange,
+                                    size: 30,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextWidget(
+                                      "Rating",
+                                      17,
+                                      Colors.black.withOpacity(.5),
+                                      FontWeight.bold,
+                                      letterSpace: 0,
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    TextWidget(
+                                      "4,5 from 5",
+                                      23,
+                                      Colors.black,
+                                      FontWeight.bold,
+                                      letterSpace: 0,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: [
+                            Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: const SizedBox(
+                                height: 60,
+                                width: 60,
+                                child: Center(
+                                  child: Icon(
+                                    Icons.people_rounded,
+                                    color: Colors.blue,
+                                    size: 30,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextWidget(
+                                      "Order",
+                                      17,
+                                      Colors.black.withOpacity(.5),
+                                      FontWeight.bold,
+                                      letterSpace: 0,
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    TextWidget(
+                                      "130 +",
+                                      23,
+                                      Colors.black,
+                                      FontWeight.bold,
+                                      letterSpace: 0,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                )),
+            AnimatedPositioned(
+                top: 300,
+                right: animate ? 1 : -50,
+                duration: const Duration(milliseconds: 400),
+                child: Container(
+                  height: 150,
+                  width: size.width / 2,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                        Colors.white.withOpacity(.1),
+                            Colors.white,
+                            Colors.white
+                      ])),
+                )),
+            AnimatedPositioned(
+                top: animate ? 380 : 480,
+                left: 1,
+                right: 1,
+                duration: const Duration(milliseconds: 400),
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 400),
+                  opacity: opacity,
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 20, right: 40),
+                    height: size.height / 5,
+                    width: size.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextWidget("Biography", 25, Colors.black, FontWeight.bold),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextWidget(
+                          "Asistant rumah tangga yang siap menerima pekerjaan",
+                          15,
+                          Colors.black.withOpacity(.5),
+                          FontWeight.normal,
                           letterSpace: 0,
                         ),
                       ],
@@ -92,263 +251,168 @@ class _SeeAllState extends State<SeeAll> {
                   ),
                 )),
             AnimatedPositioned(
-                top: position ? 430 : 500,
+                top: animate?465:560,
+                right: 80,
+                duration: const Duration(milliseconds: 400),
+                child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 400),
+                    opacity: opacity,
+                    child: TextWidget(" Lebih lengkap", 15, Colors.blue, FontWeight.bold,letterSpace: 0,))),
+            AnimatedPositioned(
                 left: 20,
                 right: 20,
-                duration: Duration(milliseconds: 500),
+                bottom: animate?80:-20, duration: const Duration(milliseconds: 400),
                 child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 500),
-                    opacity: opacity,
-                    child: Container(
-                      height: 350,
-                      child: ListView.builder(
-                        itemCount: 7,
-                        itemBuilder:
-                            (context, index) => InkWell(
-                          onTap: () async {
-                            animator();
-                            await Future.delayed(
-                                const Duration(milliseconds: 500));
-                            await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Chat(image: images[index],name: names[index],specialist: spacilality[index]),
-                                ));
-                            animator();
-                          },
-                          child: Card(
-                            elevation: 5,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: SizedBox(
-                              height: 120,
-                              width: double.infinity,
-                              child: Row(
-                                children: [
-                                  const SizedBox(width: 20,),
-                                  CircleAvatar(
-                                    radius: 30,
-                                    backgroundImage: images[index],
-                                    backgroundColor: Colors.blue,
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                    children: [
-                                      TextWidget(
-                                        names[index],
-                                        20,
-                                        Colors.black,
-                                        FontWeight.bold,
-                                        letterSpace: 0,
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      TextWidget(
-                                        spacilality[index],
-                                        17,
-                                        Colors.black,
-                                        FontWeight.bold,
-                                        letterSpace: 0,
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      const Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.orangeAccent,
-                                          ),
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.orangeAccent,
-                                          ),
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.orangeAccent,
-                                          ),
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.orangeAccent,
-                                          ),
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.orangeAccent,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  const Icon(
-                                    Icons.navigation_sharp,
-                                    color: Colors.blue,
-                                  ),
-                                  const SizedBox(width: 20,),
-                                ],
+                  opacity: opacity,
+                  duration: const Duration(milliseconds: 400),
+                  child: Container(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    height: 130,
+                    width: size.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextWidget("Jadwal", 25, Colors.black, FontWeight.bold),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Container(
+                                height: 60,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextWidget("19", 15, Colors.black, FontWeight.bold,letterSpace: 0,),
+                                    TextWidget("Thu", 15, Colors.black, FontWeight.bold,letterSpace: 0,),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ),),
-                    )
+                            Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Container(
+                                height: 60,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextWidget("20", 15, Colors.black, FontWeight.bold,letterSpace: 0,),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Container(
+                                height: 60,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextWidget("21", 15, Colors.black, FontWeight.bold,letterSpace: 0,),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Container(
+                                height: 60,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextWidget("22", 15, Colors.black, FontWeight.bold,letterSpace: 0,),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
                 )),
+            AnimatedPositioned(
+                bottom: animate?15:-80,
+                left: 30,
+                right: 30, duration: const Duration(milliseconds: 400),
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 400),
+                  opacity: opacity,
+                  child: InkWell(
+                    onTap: () async
+                    {
+                      animator();
+                      await Future.delayed(const Duration(milliseconds: 400));
+                      await Navigator.push(context, MaterialPageRoute(builder: (context) =>Oppointment(0)));
+                      animator();
+                    },
+                    child: Container(
+                      height: 65,
+                      width: size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.blue.shade900,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextWidget("Jadwalkan pesanan", 18, Colors.white, FontWeight.w500,letterSpace: 1,),
+                          const SizedBox(width: 4,),
+                          const Icon(Icons.arrow_forward_ios_outlined,color: Colors.white,size: 18,),
+                          Icon(Icons.arrow_forward_ios_outlined,color: Colors.white.withOpacity(.5),size: 18,),
+                          Icon(Icons.arrow_forward_ios_outlined,color: Colors.white.withOpacity(.2),size: 18,),
+                        ],
+                      ),
+                    ),
+                  ),
+                )),
+            AnimatedPositioned(
+                top: animate?20:100,
+                left: 20, duration: const Duration(milliseconds: 400),
+                child: AnimatedOpacity(
+                    opacity: opacity,
+                    duration: const Duration(milliseconds: 400),
+                    child: InkWell(
+                      onTap: ()
+                      {
+                        animator();
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_sharp,color: Colors.black,),
+                    ))),
           ],
         ),
       ),
     );
   }
-
-  Widget findDoctor(){
-    return AnimatedOpacity(
-      duration: const Duration(milliseconds: 400),
-      opacity: opacity,
-      child: Card(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15)),
-        child: Container(
-          height: 300,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.blue.shade700,
-                    Colors.blue.shade900,
-                    Colors.blue.shade900,
-                  ])),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Positioned(
-                  top: 25,
-                  left: 20,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 30,
-                        child: Center(
-                          child: Image(
-                            fit: BoxFit.fill,
-                            image:
-                            AssetImage('assets/images/lokasi.png'),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          TextWidget(
-                            "Cari Asistant!",
-                            18,
-                            Colors.white,
-                            FontWeight.bold,
-                            letterSpace: 0,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            mainAxisAlignment:
-                            MainAxisAlignment.start,
-                            children: [
-                              TextWidget(
-                                "Pilih Asistant rumah tangga\n dengan lokasi terdekat",
-                                15,
-                                Colors.white,
-                                FontWeight.normal,
-                                letterSpace: 0,
-                              ),
-                            ],
-                          ),
-                        ],
-                      )
-                    ],
-                  )),
-              Positioned(
-                  top: 115,
-                  left: 20,
-                  right: 20,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      height: 150,
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: AssetImage(
-                                  'assets/images/map.png'))),
-                    ),
-                  )),
-              const Positioned(
-                  top: 15,
-                  right: 15,
-                  child: Icon(
-                    Icons.close_outlined,
-                    color: Colors.white,
-                    size: 15,
-                  ))
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-  Widget upperRow(){
-    return AnimatedOpacity(
-      opacity: opacity,
-      duration: const Duration(milliseconds: 400),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          InkWell(
-            onTap: () {
-              animator();
-              Timer(const Duration(milliseconds: 600), () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Home(),
-                    ));
-              });
-            },
-            child: const Icon(
-              Icons.arrow_back_ios_rounded,
-              color: Colors.black,
-              size: 25,
-            ),
-          ),
-          TextWidget("More asistant", 25, Colors.black, FontWeight.bold),
-          const Icon(
-            Icons.search,
-            color: Colors.black,
-            size: 25,
-          )
-        ],
-      ),
-    );
-  }
-
 }
