@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:asistant_rumah/home/screens/SeeAll.dart';
+import 'package:asistant_rumah/home/screens/pesan.dart';
 import 'package:asistant_rumah/home/widgets/text_widget.dart';
 import 'Profile.dart';
 class Chat extends StatefulWidget {
@@ -80,7 +80,7 @@ class _ChatState extends State<Chat> {
                                       animator();
                                       Timer(const Duration(milliseconds: 500),()
                                       {
-                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SeeAll(),));
+                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => pesan(),));
                                       });
                                     },
                                     child: const Icon(
@@ -180,14 +180,7 @@ class _ChatState extends State<Chat> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const SizedBox(height: 30,),
-                                  msgBox(size, "Use the Stick on other hand Fandit", "08:20",Colors.blue.withOpacity(.1),Colors.grey),
-                                  const SizedBox(height: 30,),
-                                  Align(
-                                    alignment: Alignment.topRight,
-                                    child: msgBox(size, "Thanks doc!", "09:20",Colors.blue.shade900,Colors.white),
-                                  ),
-                                  const SizedBox(height: 30,),
+                                 
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -199,7 +192,7 @@ class _ChatState extends State<Chat> {
                                           color: Colors.black.withOpacity(.5),
                                         ),
                                       ),
-                                      TextWidget("today", 14, Colors.black.withOpacity(.5),FontWeight.bold),
+                                      TextWidget("Hari ini", 14, Colors.black.withOpacity(.5),FontWeight.bold),
                                       Expanded(
                                         child: Container(
                                           height: 1,
@@ -210,12 +203,12 @@ class _ChatState extends State<Chat> {
                                     ],
                                   ),
                                   const SizedBox(height: 30,),
-                                  msgBox(size, "Morning!\n\nHow the result did it\nwork well", "08:20",Colors.blue.withOpacity(.1),Colors.grey),
+                                  msgBox(size, "Hallo mba, bisa kah datang ke rumah saya ? ", "08:20",Colors.blue.withOpacity(.1),Colors.grey),
                                   const SizedBox(height: 30,),
                                   Align(
                                     alignment: Alignment.topRight,
                                     child:
-                                    msgBox(size, "Morning doc,Problem is\nsolved,Thanks doc", "08:25",Colors.blue.shade900,Colors.white),
+                                    msgBox(size, "siap bisa", "08:25",Colors.blue.shade900,Colors.white),
                                   ),
                                   const Image(image: AssetImage('assets/images/emoji.png',),width: 130,height: 130,)
                                 ],
