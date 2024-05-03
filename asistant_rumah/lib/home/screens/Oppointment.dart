@@ -17,13 +17,13 @@ class Oppointment extends StatefulWidget {
 class _OppointmentState extends State<Oppointment> {
   var images=[
 
-    const AssetImage('assets/images/doctor2.png'),
-    const AssetImage('assets/images/doctor3.png'),
-    const AssetImage('assets/images/doctor4.png'),
-    const AssetImage('assets/images/doctor5.png'),
-    const AssetImage('assets/images/doctor6.png'),
-    const AssetImage('assets/images/doctor7.png'),
-    const AssetImage('assets/images/doctor5.png'),
+    const AssetImage('assets/images/art2.png'),
+    const AssetImage('assets/images/art2.png'),
+    const AssetImage('assets/images/art2.png'),
+    const AssetImage('assets/images/art2.png'),
+    const AssetImage('assets/images/art2.png'),
+    const AssetImage('assets/images/art2.png'),
+    const AssetImage('assets/images/art2.png.png'),
   ];
   late Size size;
   var animate = false;
@@ -102,7 +102,7 @@ class _OppointmentState extends State<Oppointment> {
                                       color: Colors.black,
                                     )),
                                 TextWidget(
-                                  "Oppointment",
+                                  "Pilih jadwal",
                                   25,
                                   Colors.black,
                                   FontWeight.bold,
@@ -149,7 +149,7 @@ class _OppointmentState extends State<Oppointment> {
                             top: 390,
                             left: 30,
                             child: TextWidget(
-                              "Time",
+                              "Waktu",
                               25,
                               Colors.black,
                               FontWeight.bold,
@@ -436,7 +436,7 @@ class _OppointmentState extends State<Oppointment> {
                                                         height: 20,
                                                       ),
                                                       const Text(
-                                                        "Successed",
+                                                        "Berhasil",
                                                         style: TextStyle(
                                                             color:
                                                                 Colors.orange,
@@ -491,7 +491,7 @@ class _OppointmentState extends State<Oppointment> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   TextWidget(
-                                    "Book an appointment",
+                                    "Buat pesanan",
                                     18,
                                     Colors.white,
                                     FontWeight.w500,
