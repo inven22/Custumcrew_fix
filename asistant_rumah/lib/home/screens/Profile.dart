@@ -177,7 +177,7 @@ class _ProfileState extends State<Profile> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     TextWidget(
-                                      "Patient",
+                                      "Order",
                                       17,
                                       Colors.black.withOpacity(.5),
                                       FontWeight.bold,
@@ -240,7 +240,7 @@ class _ProfileState extends State<Profile> {
                           height: 20,
                         ),
                         TextWidget(
-                          "Famous doctor, hygienist, folklore researcher and sanitary mentor, Charles Laugier, whose contribution to the development",
+                          "Asistant rumah tangga yang siap menerima pekerjaan",
                           15,
                           Colors.black.withOpacity(.5),
                           FontWeight.normal,
@@ -257,7 +257,7 @@ class _ProfileState extends State<Profile> {
                 child: AnimatedOpacity(
                     duration: const Duration(milliseconds: 400),
                     opacity: opacity,
-                    child: TextWidget(" Read more", 15, Colors.blue, FontWeight.bold,letterSpace: 0,))),
+                    child: TextWidget(" Lebih lengkap", 15, Colors.blue, FontWeight.bold,letterSpace: 0,))),
             AnimatedPositioned(
                 left: 20,
                 right: 20,
@@ -273,7 +273,7 @@ class _ProfileState extends State<Profile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextWidget("Shedule", 25, Colors.black, FontWeight.bold),
+                        TextWidget("Jadwal", 25, Colors.black, FontWeight.bold),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -385,7 +385,7 @@ class _ProfileState extends State<Profile> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          TextWidget("Make an appointment", 18, Colors.white, FontWeight.w500,letterSpace: 1,),
+                          TextWidget("Jadwalkan pesanan", 18, Colors.white, FontWeight.w500,letterSpace: 1,),
                           const SizedBox(width: 4,),
                           const Icon(Icons.arrow_forward_ios_outlined,color: Colors.white,size: 18,),
                           Icon(Icons.arrow_forward_ios_outlined,color: Colors.white.withOpacity(.5),size: 18,),
