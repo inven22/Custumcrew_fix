@@ -10,6 +10,8 @@ import 'package:asistant_rumah/home/screens/account_screen.dart';
 import 'Profile.dart';
 import 'pesan.dart';
 import 'More_art.dart';
+import 'Notification.dart';
+import 'riwayat.dart';
 
 
 class Home extends StatefulWidget {
@@ -77,7 +79,15 @@ class _HomeState extends State<Home> {
                           TextWidget("Ahmad", 25, Colors.black, FontWeight.bold),
                         ],
                       ),
-                      const Icon(Icons.phonelink_ring)
+                     IconButton(
+                        icon: Icon(Icons.phonelink_ring),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => NotificationPage()),
+                          );
+                        },
+                      )
                     ],
                   ),
                 ),
@@ -199,8 +209,10 @@ class _HomeState extends State<Home> {
         ),
         GestureDetector(
           onTap: () {
-            // Tambahkan aksi Anda untuk ikon kalender di sini
-            // Contoh: Navigator.pushNamed(context, '/calendar');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => RiwayatPesananPage()),
+            );
           },
           child: Icon(Icons.calendar_month_rounded, color: Colors.black, size: 30),
         ),

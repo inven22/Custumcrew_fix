@@ -39,6 +39,7 @@ dependencies:
   curved_navigation_bar: ^1.0.3
   syncfusion_flutter_datepicker: ^20.3.60
   flutter_floating_bottom_bar: ^1.1.0
+  ionicons: 0.2.2
 
 dev_dependencies:
   flutter_test:
