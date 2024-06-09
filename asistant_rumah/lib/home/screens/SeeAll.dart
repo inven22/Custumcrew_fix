@@ -51,9 +51,9 @@ class _ProfileState extends State<Profile> {
             AnimatedPositioned(
                 top: 1,
                 right: animate ? -100 : -200,
-                duration: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 40),
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 40),
                   opacity: opacity,
                   child: Container(
                     height: size.height / 2,
@@ -65,9 +65,9 @@ class _ProfileState extends State<Profile> {
                 )),
             AnimatedPositioned(
                 left: animate ? 1 : -100,
-                duration: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 40),
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 40),
                   opacity: opacity,
                   child: Container(
                     padding: const EdgeInsets.only(top: 80, left: 20),
@@ -206,7 +206,7 @@ class _ProfileState extends State<Profile> {
             AnimatedPositioned(
                 top: 300,
                 right: animate ? 1 : -50,
-                duration: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 40),
                 child: Container(
                   height: 150,
                   width: size.width / 2,
@@ -224,9 +224,9 @@ class _ProfileState extends State<Profile> {
                 top: animate ? 380 : 480,
                 left: 1,
                 right: 1,
-                duration: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 40),
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 40),
                   opacity: opacity,
                   child: Container(
                     padding: const EdgeInsets.only(left: 20, right: 40),
@@ -253,18 +253,18 @@ class _ProfileState extends State<Profile> {
             AnimatedPositioned(
                 top: animate?465:560,
                 right: 80,
-                duration: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 40),
                 child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 40),
                     opacity: opacity,
                     child: TextWidget(" Lebih lengkap", 15, Colors.blue, FontWeight.bold,letterSpace: 0,))),
             AnimatedPositioned(
                 left: 20,
                 right: 20,
-                bottom: animate?80:-20, duration: const Duration(milliseconds: 400),
+                bottom: animate?80:-20, duration: const Duration(milliseconds: 40),
                 child: AnimatedOpacity(
                   opacity: opacity,
-                  duration: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 40),
                   child: Container(
                     padding: const EdgeInsets.only(bottom: 20),
                     height: 130,
@@ -363,15 +363,15 @@ class _ProfileState extends State<Profile> {
             AnimatedPositioned(
                 bottom: animate?15:-80,
                 left: 30,
-                right: 30, duration: const Duration(milliseconds: 400),
+                right: 30, duration: const Duration(milliseconds: 40),
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 40),
                   opacity: opacity,
                   child: InkWell(
                     onTap: () async
                     {
                       animator();
-                      await Future.delayed(const Duration(milliseconds: 400));
+                      await Future.delayed(const Duration(milliseconds: 40));
                       await Navigator.push(context, MaterialPageRoute(builder: (context) =>Oppointment(0)));
                       animator();
                     },
@@ -397,10 +397,10 @@ class _ProfileState extends State<Profile> {
                 )),
             AnimatedPositioned(
                 top: animate?20:100,
-                left: 20, duration: const Duration(milliseconds: 400),
+                left: 20, duration: const Duration(milliseconds: 40),
                 child: AnimatedOpacity(
                     opacity: opacity,
-                    duration: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 40),
                     child: InkWell(
                       onTap: ()
                       {

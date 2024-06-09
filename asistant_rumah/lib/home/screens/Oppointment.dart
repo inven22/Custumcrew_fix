@@ -69,13 +69,13 @@ class _OppointmentState extends State<Oppointment> {
         child: Stack(
           children: [
             AnimatedPositioned(
-                duration: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 40),
                 top: animate ? 1 : 80,
                 left: 1,
                 bottom: 1,
                 right: 1,
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 40),
                   opacity: opacity,
                   child: Container(
                     padding: const EdgeInsets.only(top: 70),
@@ -93,7 +93,7 @@ class _OppointmentState extends State<Oppointment> {
                                 InkWell(
                                     onTap: () {
                                       animator();
-                                      Timer(const Duration(milliseconds: 500), () {
+                                      Timer(const Duration(milliseconds: 50), () {
                                         Navigator.pop(context);
                                       });
                                     },

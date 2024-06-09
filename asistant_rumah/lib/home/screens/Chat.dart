@@ -49,13 +49,13 @@ class _ChatState extends State<Chat> {
         child: Stack(
           children: [
             AnimatedPositioned(
-                duration: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 40),
                 top: animate ? 1 : 50,
                 bottom: 1,
                 left: 1,
                 right: 1,
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 40),
                   opacity: opacity,
                   child: SizedBox(
                     height: size.height,
@@ -78,7 +78,7 @@ class _ChatState extends State<Chat> {
                                     onTap: ()
                                     {
                                       animator();
-                                      Timer(const Duration(milliseconds: 500),()
+                                      Timer(const Duration(milliseconds: 50),()
                                       {
                                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => pesan(),));
                                       });
@@ -92,7 +92,7 @@ class _ChatState extends State<Chat> {
                                     onTap: () async
                                     {
                                       animator();
-                                      await Future.delayed(const Duration(milliseconds: 400));
+                                      await Future.delayed(const Duration(milliseconds: 40));
                                       await Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(image: widget.image,name: widget.name,speciality: widget.specialist),));
                                       animator();
                                     },
