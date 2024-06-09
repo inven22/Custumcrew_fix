@@ -5,7 +5,7 @@ Cara penginstalan aplikasi dari github :
 1. Clone folder project dari github 
 2. Setelah clone pastikan project sudah tersimpan di file manager 
 3. Lalu buka folder "laravel_app" lalu ketikkan perintah composer install untuk mendownload ulang composer nya
-4. Nyalakan xampp terlebih dahulu dikarenakan kami masih memakai database mysql di phpmyadmin  
+4. Nyalakan xampp lebih rincinya apache dan mySQL terlebih dahulu dikarenakan kami masih memakai database mySQL di phpmyadmin  
 5. setelah itu lalu migrasi database dengan mengetikan perintah php artisan miigrate pada terminal 
 6. Setelah composer berhasil di install dan database berhasil di migrasi lalu ketikan perintah php artisan serve untuk memulai servernya
    buka folder "asistant_rumah" sebagai folder file front end  nya 
