@@ -7,7 +7,7 @@ Cara penginstalan aplikasi dari github :
 3. Lalu buka folder "laravel_app" lalu ketikkan perintah composer install untuk mendownload ulang composer nya
 4. Nyalakan xampp terlebih dahulu dikarenakan kami masih memakai database mysql di phpmyadmin  
 5. setelah itu lalu migrasi database dengan mengetikan perintah php artisan miigrate pada terminal 
-6. Setelah composer berhasil di install dan database berhasil di migrasi lalu 
+6. Setelah composer berhasil di install dan database berhasil di migrasi lalu ketikan perintah php artisan serve untuk memulai servernya
    buka folder "asistant_rumah" sebagai folder file front end  nya 
 7. lalu arahkan ke file main.dart dan run project maka aplikasi mobile siap untuk di tes 
 
