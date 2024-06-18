@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:asistant_rumah/home/widgets/text_widget.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:asistant_rumah/home/screens/NotificationModel.dart'; // Import the model
+import 'package:asistant_rumah/home/widgets/text_widget.dart';
 
 class NotificationPage extends StatefulWidget {
   @override
@@ -7,26 +11,26 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  String _selectedSortOption = 'Waktu'; // Opsi default
+  late Future<List<NotificationModel>> notifications;
 
-  List<Map<String, String>> notifications = List.generate(
-    5,
-    (index) => {
-      'title': 'Notifikasi $index',
-      'detail': 'Detail notifikasi $index',
-    },
-  );
+  @override
+  void initState() {
+    super.initState();
+    notifications = fetchNotifications();
+  }
 
-  void _sortNotifications() {
-    setState(() {
-      if (_selectedSortOption == 'Waktu') {
-        // Sort by time, assuming the list is already in time order
-        notifications = notifications.reversed.toList();
-      } else if (_selectedSortOption == 'A-Z') {
-        // Sort by title A-Z
-        notifications.sort((a, b) => a['title']!.compareTo(b['title']!));
-      }
-    });
+  Future<List<NotificationModel>> fetchNotifications() async {
+    final response =
+        await http.get(Uri.parse('http://127.0.0.1:8000/api/getNotifications'));
+
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse
+          .map((data) => NotificationModel.fromJson(data))
+          .toList();
+    } else {
+      throw Exception('Failed to load notifications');
+    }
   }
 
   @override
@@ -35,66 +39,44 @@ class _NotificationPageState extends State<NotificationPage> {
       appBar: AppBar(
         title: Text('Notifikasi'),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: DropdownButton<String>(
-              value: _selectedSortOption,
-              items: [
-                DropdownMenuItem(
-                  child: Text('Waktu'),
-                  value: 'Waktu',
-                ),
-                DropdownMenuItem(
-                  child: Text('A-Z'),
-                  value: 'A-Z',
-                ),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  _selectedSortOption = value!;
-                  _sortNotifications();
-                });
-              },
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.all(10.0),
-              itemCount: notifications.length,
+      body: FutureBuilder<List<NotificationModel>>(
+        future: notifications,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No notifications found'));
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                return Card(
-                  elevation: 5.0,
-                  margin: EdgeInsets.symmetric(vertical: 10.0),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.notifications,
-                      color: Colors.blue,
-                      size: 30.0,
-                    ),
-                    title: TextWidget(
-                      notifications[index]['title']!,
-                      18,
-                      Colors.black,
-                      FontWeight.bold,
-                    ),
-                    subtitle: TextWidget(
-                      notifications[index]['detail']!,
-                      14,
-                      Colors.grey,
-                      FontWeight.normal,
-                    ),
-                    trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey),
-                    onTap: () {
-                      // Aksi saat notifikasi ditekan (jika diperlukan)
-                    },
+                return ListTile(
+                  leading: Icon(
+                    Icons.notifications,
+                    color: Colors.blue,
                   ),
+                  title: TextWidget(
+                    'Order ID: ${snapshot.data![index].orderId}',
+                    18,
+                    Colors.black,
+                    FontWeight.normal,
+                  ),
+                  subtitle: TextWidget(
+                    snapshot.data![index].isi,
+                    14,
+                    Colors.grey,
+                    FontWeight.normal,
+                  ),
+                  onTap: () {
+                    // Action when notification is tapped (if needed)
+                  },
                 );
               },
-            ),
-          ),
-        ],
+            );
+          }
+        },
       ),
     );
   }

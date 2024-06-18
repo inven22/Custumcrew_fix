@@ -7,7 +7,6 @@ import 'package:asistant_rumah/Screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
-
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
 
@@ -16,8 +15,6 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +30,6 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
         leadingWidth: 80,
       ),
-      
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(30),
@@ -60,7 +56,8 @@ class _AccountScreenState extends State<AccountScreen> {
                 width: double.infinity,
                 child: Row(
                   children: [
-                    Image.asset("assets/images/avatar.png", width: 70, height: 70),
+                    Image.asset("assets/images/avatar.png",
+                        width: 70, height: 70),
                     const SizedBox(width: 20),
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,7 +118,6 @@ class _AccountScreenState extends State<AccountScreen> {
                 iconColor: Colors.blue,
                 onTap: () {},
               ),
-              
               const SizedBox(height: 20),
               SettingItem(
                 title: "Help",
@@ -130,20 +126,20 @@ class _AccountScreenState extends State<AccountScreen> {
                 iconColor: Colors.red,
                 onTap: () {},
               ),
-               const SizedBox(height: 20),
+              const SizedBox(height: 20),
               SettingItem(
                 title: "Logout",
                 icon: Ionicons.notifications,
                 bgColor: Colors.blue.shade100,
                 iconColor: Colors.blue,
-                 onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
-                          ),
-                        );
-                      },
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(),
+                    ),
+                  );
+                },
               ),
             ],
           ),

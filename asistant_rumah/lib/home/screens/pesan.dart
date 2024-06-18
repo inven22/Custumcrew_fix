@@ -48,7 +48,7 @@ class _SeeAllState extends State<pesan> {
       child: Stack(
         children: [
           AnimatedPositioned(
-            duration: Duration(milliseconds: 40),
+            duration: Duration(milliseconds: 400),
             top: position ? 20 : 50, // Nilai top diubah untuk menyesuaikan posisi awal
             left: 40,
             right: 20,
@@ -59,10 +59,10 @@ class _SeeAllState extends State<pesan> {
             top: position ? 80 : 140, // Nilai top diubah untuk menyesuaikan posisi awal
             right: 40,
             left: 40,
-            duration: Duration(milliseconds: 40),
+            duration: Duration(milliseconds: 400),
             child: AnimatedOpacity(
               opacity: opacity,
-              duration: Duration(milliseconds: 40),
+              duration: Duration(milliseconds: 400),
               child: Container(
                 width: size.width,
                 child: Row(
@@ -91,9 +91,9 @@ class _SeeAllState extends State<pesan> {
             top: position ? 110 : 170, // Nilai top diubah untuk menyesuaikan posisi awal
             left: 20,
             right: 20,
-            duration: Duration(milliseconds: 50),
+            duration: Duration(milliseconds: 500),
             child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 50),
+              duration: const Duration(milliseconds: 500),
               opacity: opacity,
               child: Container(
                 height: 630,
@@ -102,7 +102,7 @@ class _SeeAllState extends State<pesan> {
                   itemBuilder: (context, index) => InkWell(
                     onTap: () async {
                       animator();
-                      await Future.delayed(const Duration(milliseconds: 50));
+                      await Future.delayed(const Duration(milliseconds: 500));
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -206,14 +206,14 @@ class _SeeAllState extends State<pesan> {
   Widget upperRow(){
     return AnimatedOpacity(
       opacity: opacity,
-      duration: const Duration(milliseconds: 40),
+      duration: const Duration(milliseconds: 400),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
             onTap: () {
               animator();
-              Timer(const Duration(milliseconds: 60), () {
+              Timer(const Duration(milliseconds: 600), () {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(

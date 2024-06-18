@@ -3,15 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:asistant_rumah/home/res/lists.dart';
 import 'package:asistant_rumah/home/widgets/text_widget.dart';
 import 'Oppointment.dart';
+import 'package:http/http.dart' as http;
+
 class Profile extends StatefulWidget {
   final AssetImage image;
   final String name;
   final String speciality;
-  const Profile({super.key,required this.image,required this.name,required this.speciality});
+  final String biography;
+  final int order;
+  final String email;
+  final int id;
+  const Profile({
+    Key? key,
+    required this.image,
+    required this.name,
+    required this.speciality,
+    required this.order,
+    required this.biography,
+    required this.email,
+    required this.id,
+  }) : super(key: key);
 
   @override
   State<Profile> createState() => _ProfileState();
 }
+
 class _ProfileState extends State<Profile> {
   var animate = false;
   var opacity = 0.0;
@@ -51,9 +67,9 @@ class _ProfileState extends State<Profile> {
             AnimatedPositioned(
                 top: 1,
                 right: animate ? -100 : -200,
-                duration: const Duration(milliseconds: 40),
+                duration: const Duration(milliseconds: 400),
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 40),
+                  duration: const Duration(milliseconds: 400),
                   opacity: opacity,
                   child: Container(
                     height: size.height / 2,
@@ -65,9 +81,9 @@ class _ProfileState extends State<Profile> {
                 )),
             AnimatedPositioned(
                 left: animate ? 1 : -100,
-                duration: const Duration(milliseconds: 40),
+                duration: const Duration(milliseconds: 400),
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 40),
+                  duration: const Duration(milliseconds: 400),
                   opacity: opacity,
                   child: Container(
                     padding: const EdgeInsets.only(top: 80, left: 20),
@@ -77,7 +93,7 @@ class _ProfileState extends State<Profile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextWidget(
-                          names[0],
+                          widget.name,
                           25,
                           Colors.black,
                           FontWeight.bold,
@@ -87,7 +103,7 @@ class _ProfileState extends State<Profile> {
                           height: 5,
                         ),
                         TextWidget(
-                          spacilality[0],
+                          widget.speciality,
                           15,
                           Colors.black.withOpacity(.6),
                           FontWeight.bold,
@@ -187,7 +203,7 @@ class _ProfileState extends State<Profile> {
                                       height: 10,
                                     ),
                                     TextWidget(
-                                      "130 +",
+                                      widget.order.toString(),
                                       23,
                                       Colors.black,
                                       FontWeight.bold,
@@ -206,7 +222,7 @@ class _ProfileState extends State<Profile> {
             AnimatedPositioned(
                 top: 300,
                 right: animate ? 1 : -50,
-                duration: const Duration(milliseconds: 40),
+                duration: const Duration(milliseconds: 400),
                 child: Container(
                   height: 150,
                   width: size.width / 2,
@@ -216,17 +232,17 @@ class _ProfileState extends State<Profile> {
                           end: Alignment.bottomCenter,
                           colors: [
                         Colors.white.withOpacity(.1),
-                            Colors.white,
-                            Colors.white
+                        Colors.white,
+                        Colors.white
                       ])),
                 )),
             AnimatedPositioned(
                 top: animate ? 380 : 480,
                 left: 1,
                 right: 1,
-                duration: const Duration(milliseconds: 40),
+                duration: const Duration(milliseconds: 400),
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 40),
+                  duration: const Duration(milliseconds: 400),
                   opacity: opacity,
                   child: Container(
                     padding: const EdgeInsets.only(left: 20, right: 40),
@@ -235,12 +251,13 @@ class _ProfileState extends State<Profile> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextWidget("Biography", 25, Colors.black, FontWeight.bold),
+                        TextWidget(
+                            "Biography", 25, Colors.black, FontWeight.bold),
                         const SizedBox(
                           height: 20,
                         ),
                         TextWidget(
-                          "Asistant rumah tangga yang siap menerima pekerjaan",
+                          widget.biography,
                           15,
                           Colors.black.withOpacity(.5),
                           FontWeight.normal,
@@ -251,20 +268,27 @@ class _ProfileState extends State<Profile> {
                   ),
                 )),
             AnimatedPositioned(
-                top: animate?465:560,
+                top: animate ? 465 : 560,
                 right: 80,
-                duration: const Duration(milliseconds: 40),
+                duration: const Duration(milliseconds: 400),
                 child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 40),
+                    duration: const Duration(milliseconds: 400),
                     opacity: opacity,
-                    child: TextWidget(" Lebih lengkap", 15, Colors.blue, FontWeight.bold,letterSpace: 0,))),
+                    child: TextWidget(
+                      " Lebih lengkap",
+                      15,
+                      Colors.blue,
+                      FontWeight.bold,
+                      letterSpace: 0,
+                    ))),
             AnimatedPositioned(
                 left: 20,
                 right: 20,
-                bottom: animate?80:-20, duration: const Duration(milliseconds: 40),
+                bottom: animate ? 80 : -20,
+                duration: const Duration(milliseconds: 400),
                 child: AnimatedOpacity(
                   opacity: opacity,
-                  duration: const Duration(milliseconds: 40),
+                  duration: const Duration(milliseconds: 400),
                   child: Container(
                     padding: const EdgeInsets.only(bottom: 20),
                     height: 130,
@@ -291,8 +315,20 @@ class _ProfileState extends State<Profile> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    TextWidget("19", 15, Colors.black, FontWeight.bold,letterSpace: 0,),
-                                    TextWidget("Thu", 15, Colors.black, FontWeight.bold,letterSpace: 0,),
+                                    TextWidget(
+                                      "19",
+                                      15,
+                                      Colors.black,
+                                      FontWeight.bold,
+                                      letterSpace: 0,
+                                    ),
+                                    TextWidget(
+                                      "Thu",
+                                      15,
+                                      Colors.black,
+                                      FontWeight.bold,
+                                      letterSpace: 0,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -311,7 +347,13 @@ class _ProfileState extends State<Profile> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    TextWidget("20", 15, Colors.black, FontWeight.bold,letterSpace: 0,),
+                                    TextWidget(
+                                      "20",
+                                      15,
+                                      Colors.black,
+                                      FontWeight.bold,
+                                      letterSpace: 0,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -330,7 +372,13 @@ class _ProfileState extends State<Profile> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    TextWidget("21", 15, Colors.black, FontWeight.bold,letterSpace: 0,),
+                                    TextWidget(
+                                      "21",
+                                      15,
+                                      Colors.black,
+                                      FontWeight.bold,
+                                      letterSpace: 0,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -349,7 +397,13 @@ class _ProfileState extends State<Profile> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    TextWidget("22", 15, Colors.black, FontWeight.bold,letterSpace: 0,),
+                                    TextWidget(
+                                      "22",
+                                      15,
+                                      Colors.black,
+                                      FontWeight.bold,
+                                      letterSpace: 0,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -361,18 +415,23 @@ class _ProfileState extends State<Profile> {
                   ),
                 )),
             AnimatedPositioned(
-                bottom: animate?15:-80,
+                bottom: animate ? 15 : -80,
                 left: 30,
-                right: 30, duration: const Duration(milliseconds: 40),
+                right: 30,
+                duration: const Duration(milliseconds: 400),
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 40),
+                  duration: const Duration(milliseconds: 400),
                   opacity: opacity,
                   child: InkWell(
-                    onTap: () async
-                    {
+                    onTap: () async {
                       animator();
-                      await Future.delayed(const Duration(milliseconds: 40));
-                      await Navigator.push(context, MaterialPageRoute(builder: (context) =>Oppointment(0)));
+                      await Future.delayed(const Duration(milliseconds: 400));
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Oppointment(
+                                    id: widget.id,
+                                  )));
                       animator();
                     },
                     child: Container(
@@ -385,30 +444,52 @@ class _ProfileState extends State<Profile> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          TextWidget("Jadwalkan pesanan", 18, Colors.white, FontWeight.w500,letterSpace: 1,),
-                          const SizedBox(width: 4,),
-                          const Icon(Icons.arrow_forward_ios_outlined,color: Colors.white,size: 18,),
-                          Icon(Icons.arrow_forward_ios_outlined,color: Colors.white.withOpacity(.5),size: 18,),
-                          Icon(Icons.arrow_forward_ios_outlined,color: Colors.white.withOpacity(.2),size: 18,),
+                          TextWidget(
+                            "Jadwalkan pesanan",
+                            18,
+                            Colors.white,
+                            FontWeight.w500,
+                            letterSpace: 1,
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          const Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            color: Colors.white.withOpacity(.5),
+                            size: 18,
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            color: Colors.white.withOpacity(.2),
+                            size: 18,
+                          ),
                         ],
                       ),
                     ),
                   ),
                 )),
             AnimatedPositioned(
-                top: animate?20:100,
-                left: 20, duration: const Duration(milliseconds: 40),
+                top: animate ? 20 : 100,
+                left: 20,
+                duration: const Duration(milliseconds: 400),
                 child: AnimatedOpacity(
                     opacity: opacity,
-                    duration: const Duration(milliseconds: 40),
+                    duration: const Duration(milliseconds: 400),
                     child: InkWell(
-                      onTap: ()
-                      {
+                      onTap: () {
                         animator();
                         Navigator.pop(context);
                       },
                       child: const Icon(
-                        Icons.arrow_back_ios_new_sharp,color: Colors.black,),
+                        Icons.arrow_back_ios_new_sharp,
+                        color: Colors.black,
+                      ),
                     ))),
           ],
         ),

@@ -10,12 +10,12 @@ import 'package:asistant_rumah/home/screens/account_screen.dart';
 import 'Profile.dart';
 import 'pesan.dart';
 import 'More_art.dart';
-import 'notification.dart';
+import 'Notification.dart';
 import 'riwayat.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
-  
+
   get image => null;
 
   @override
@@ -28,15 +28,16 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
       animator();
+
       setState(() {});
     });
   }
 
-  // Mengubah nilai opacity dan position
-  void animator() {
+  animator() {
     if (opacity == 1) {
       opacity = 0;
       position = false;
@@ -58,14 +59,13 @@ class _HomeState extends State<Home> {
           width: MediaQuery.of(context).size.width,
           child: Stack(
             children: [
-              // Posisi dan opacity animasi untuk salam dan ikon notifikasi
               AnimatedPositioned(
-                duration: const Duration(milliseconds: 40),
+                duration: const Duration(milliseconds: 400),
                 top: position ? 1 : 100,
                 right: 20,
                 left: 20,
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 40),
+                  duration: const Duration(milliseconds: 400),
                   opacity: opacity,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,8 +73,10 @@ class _HomeState extends State<Home> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextWidget("Selamat datang", 17, Colors.black.withOpacity(.7), FontWeight.bold),
-                          TextWidget("Ahmad", 25, Colors.black, FontWeight.bold),
+                          TextWidget("Selamat datang", 17,
+                              Colors.black.withOpacity(.7), FontWeight.bold),
+                          TextWidget(
+                              "Ahmad", 25, Colors.black, FontWeight.bold),
                         ],
                       ),
                       IconButton(
@@ -82,22 +84,22 @@ class _HomeState extends State<Home> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => NotificationPage()),
+                            MaterialPageRoute(
+                                builder: (context) => NotificationPage()),
                           );
                         },
-                      ),
+                      )
                     ],
                   ),
                 ),
               ),
-              // Posisi dan opacity animasi untuk bar pencarian
               AnimatedPositioned(
                 top: position ? 80 : 140,
                 left: 20,
                 right: 20,
-                duration: const Duration(milliseconds: 40),
+                duration: const Duration(milliseconds: 400),
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 40),
+                  duration: const Duration(milliseconds: 400),
                   opacity: opacity,
                   child: Container(
                     height: 50,
@@ -108,26 +110,24 @@ class _HomeState extends State<Home> {
                     ),
                     child: TextFormField(
                       decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(
-                          Icons.search_sharp,
-                          size: 30,
-                          color: Colors.black.withOpacity(.5),
-                        ),
-                        hintText: "   Cari Asistant rumah tangga",
-                      ),
+                          border: InputBorder.none,
+                          prefixIcon: Icon(
+                            Icons.search_sharp,
+                            size: 30,
+                            color: Colors.black.withOpacity(.5),
+                          ),
+                          hintText: "   Cari Asistant rumah tangga"),
                     ),
                   ),
                 ),
               ),
-              // Posisi dan opacity animasi untuk kartu gambar
               AnimatedPositioned(
                 top: position ? 150 : 220,
                 right: 20,
                 left: 20,
-                duration: const Duration(milliseconds: 40),
+                duration: const Duration(milliseconds: 400),
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 40),
+                  duration: const Duration(milliseconds: 400),
                   opacity: opacity,
                   child: Card(
                     shape: RoundedRectangleBorder(
@@ -138,7 +138,7 @@ class _HomeState extends State<Home> {
                       width: MediaQuery.of(context).size.width,
                       child: Stack(
                         children: [
-                          // Gambar dari internet
+                          // Gambar dari online
                           Positioned(
                             top: 0,
                             left: 0,
@@ -155,100 +155,114 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-              // Baris kategori
               categoryRow(),
-              // Posisi dan opacity animasi untuk bagian rekomendasi
               AnimatedPositioned(
-                top: position ? 420 : 500,
-                left: 20,
-                right: 20,
-                duration: const Duration(milliseconds: 40),
-                child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 30),
-                  opacity: opacity,
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextWidget("Rekomendasi", 25, Colors.black.withOpacity(.8), FontWeight.bold, letterSpace: 0),
-                        InkWell(
-                          onTap: () async {
-                            animator();
-                            setState(() {});
-                            await Future.delayed(const Duration(milliseconds: 50));
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return moreart();
-                              }),
-                            );
-                            setState(() {
-                              animator();
-                            });
-                          },
-                          child: TextWidget("Lihat semua art", 15, Colors.blue.shade600.withOpacity(.8), FontWeight.bold, letterSpace: 0),
-                        ),
-                      ],
+                  top: position ? 420 : 500,
+                  left: 20,
+                  right: 20,
+                  duration: const Duration(milliseconds: 400),
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: opacity,
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextWidget(
+                            "Rekomendasi",
+                            25,
+                            Colors.black.withOpacity(.8),
+                            FontWeight.bold,
+                            letterSpace: 0,
+                          ),
+                          InkWell(
+                              onTap: () async {
+                                animator();
+                                setState(() {});
+                                // Timer(Duration(seconds: 1),() {
+                                //   Navigator.push(context, MaterialPageRoute(builder: (context) => SeeAll(),));
+                                //   animator();
+                                // },);
+                                await Future.delayed(
+                                    const Duration(milliseconds: 500));
+                                await Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) {
+                                    return moreart();
+                                  },
+                                ));
+
+                                setState(() {
+                                  animator();
+                                });
+                              },
+                              child: TextWidget(
+                                "Lihat semua art",
+                                15,
+                                Colors.blue.shade600.withOpacity(.8),
+                                FontWeight.bold,
+                                letterSpace: 0,
+                              )),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              // Posisi dan opacity animasi untuk daftar rekomendasi
+                  )),
               doctorList(),
-              // Navigasi bawah yang melengkung
               Align(
                 alignment: Alignment.bottomCenter,
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 40),
+                  duration: const Duration(milliseconds: 400),
                   opacity: opacity,
                   child: CurvedNavigationBar(
                     backgroundColor: Colors.white,
                     items: [
                       GestureDetector(
                         onTap: () {},
-                        child: Icon(Icons.home_filled, color: Colors.blue, size: 30),
+                        child: Icon(Icons.home_filled,
+                            color: Colors.blue, size: 30),
                       ),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => RiwayatPesananPage()),
+                            MaterialPageRoute(
+                                builder: (context) => RiwayatPesananPage()),
                           );
                         },
-                        child: Icon(Icons.calendar_month_rounded, color: Colors.black, size: 30),
+                        child: Icon(Icons.calendar_month_rounded,
+                            color: Colors.black, size: 30),
                       ),
                       GestureDetector(
                         onTap: () {
-                          Timer(const Duration(milliseconds: 60), () {
+                          Timer(const Duration(milliseconds: 600), () {
                             Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => pesan(),
-                              ),
-                            );
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => pesan(),
+                                ));
                           });
                         },
                         child: AnimatedOpacity(
-                          duration: const Duration(milliseconds: 40),
+                          duration: const Duration(milliseconds: 400),
                           opacity: opacity,
-                          child: Icon(Icons.message, color: Colors.black, size: 30),
+                          child: Icon(Icons.message,
+                              color: Colors.black, size: 30),
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AccountScreen(),
-                            ),
-                          );
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AccountScreen(),
+                              ));
                         },
-                        child: Icon(Icons.account_circle_outlined, color: Colors.black, size: 30),
+                        child: Icon(Icons.account_circle_outlined,
+                            color: Colors.black, size: 30),
                       ),
                     ],
                   ),
                 ),
-              ),
+              )
             ],
           ),
         ),
@@ -256,19 +270,18 @@ class _HomeState extends State<Home> {
     );
   }
 
-  // Widget untuk daftar rekomendasi
   Widget doctorList() {
     return AnimatedPositioned(
       top: position ? 460 : 550,
       left: 20,
       right: 20,
-      duration: const Duration(milliseconds: 40),
+      duration: const Duration(milliseconds: 400),
       child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 40),
+        duration: const Duration(milliseconds: 400),
         opacity: opacity,
         child: AnimatedOpacity(
           opacity: opacity,
-          duration: const Duration(milliseconds: 30),
+          duration: const Duration(milliseconds: 300),
           child: SizedBox(
             height: 270,
             width: MediaQuery.of(context).size.width,
@@ -277,19 +290,27 @@ class _HomeState extends State<Home> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      // TODO: Tentukan aksi saat item pertama diketuk
+                      // {
+                      //    animator();
+                      //    await Future.delayed(const Duration(milliseconds: 400));
+                      //    var image;
+                      //    await Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(image: widget.image,name: widget.name,speciality: widget.specialist),));
+                      //     animator();
+                      // }
                     },
                     child: doctorCard(names[0], spacilality[0], images[0]),
                   ),
                   GestureDetector(
                     onTap: () {
-                      // TODO: Tentukan aksi saat item kedua diketuk
+                      // Action when the second doctor card is tapped
+                      // You can navigate to a new screen or perform any other action
                     },
                     child: doctorCard(names[1], spacilality[1], images[1]),
                   ),
                   GestureDetector(
                     onTap: () {
-                      // TODO: Tentukan aksi saat item ketiga diketuk
+                      // Action when the third doctor card is tapped
+                      // You can navigate to a new screen or perform any other action
                     },
                     child: doctorCard(names[2], spacilality[2], images[2]),
                   ),
@@ -302,7 +323,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  // Widget untuk kartu rekomendasi tunggal
   Widget doctorCard(String name, String specialist, AssetImage image) {
     return Card(
       elevation: 2,
@@ -314,76 +334,112 @@ class _HomeState extends State<Home> {
         width: double.infinity,
         child: Row(
           children: [
-            const SizedBox(width: 10),
+            const SizedBox(
+              width: 10,
+            ),
             CircleAvatar(
               radius: 30,
               backgroundImage: image,
               backgroundColor: Colors.blue,
             ),
-            const SizedBox(width: 10),
+            const SizedBox(
+              width: 10,
+            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextWidget(name, 20, Colors.black, FontWeight.bold, letterSpace: 0),
-                const SizedBox(height: 5),
-                TextWidget(specialist, 17, Colors.black, FontWeight.bold, letterSpace: 0),
-                const SizedBox(height: 5),
+                TextWidget(
+                  name,
+                  20,
+                  Colors.black,
+                  FontWeight.bold,
+                  letterSpace: 0,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                TextWidget(
+                  specialist,
+                  17,
+                  Colors.black,
+                  FontWeight.bold,
+                  letterSpace: 0,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.star, color: Colors.orangeAccent),
-                    Icon(Icons.star, color: Colors.orangeAccent),
-                    Icon(Icons.star, color: Colors.orangeAccent),
-                    Icon(Icons.star, color: Colors.orangeAccent),
-                    Icon(Icons.star, color: Colors.orangeAccent),
+                    Icon(
+                      Icons.star,
+                      color: Colors.orangeAccent,
+                    ),
+                    Icon(
+                      Icons.star,
+                      color: Colors.orangeAccent,
+                    ),
+                    Icon(
+                      Icons.star,
+                      color: Colors.orangeAccent,
+                    ),
+                    Icon(
+                      Icons.star,
+                      color: Colors.orangeAccent,
+                    ),
+                    Icon(
+                      Icons.star,
+                      color: Colors.orangeAccent,
+                    ),
                   ],
                 ),
               ],
             ),
             const Spacer(),
-            const Icon(Icons.navigation_sharp, color: Colors.blue),
-            const SizedBox(width: 20),
+            const Icon(
+              Icons.navigation_sharp,
+              color: Colors.blue,
+            ),
+            const SizedBox(
+              width: 20,
+            ),
           ],
         ),
       ),
     );
   }
 
-  // Widget untuk baris kategori
   Widget categoryRow() {
     return AnimatedPositioned(
-      top: position ? 320 : 420,
-      left: 25,
-      right: 25,
-      duration: const Duration(milliseconds: 40),
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 40),
-        opacity: opacity,
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              category("assets/images/clean.png", "Cleaning", 10),
-              category("assets/images/baby.png", "Baby.C", 15),
-              category("assets/images/ofice.png", "Office.C", 10),
-              category("assets/images/app.png", "Lainnya", 12),
-            ],
+        top: position ? 320 : 420,
+        left: 25,
+        right: 25,
+        duration: const Duration(milliseconds: 400),
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 400),
+          opacity: opacity,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                category("assets/images/clean.png", "Cleaning", 10),
+                category("assets/images/baby.png", "Baby.C", 15),
+                category("assets/images/ofice.png", "Office.C", 10),
+                category("assets/images/app.png", "Lainnya", 12),
+              ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
-  // Widget untuk kategori tunggal
   Widget category(String asset, String txt, double padding) {
     return Column(
       children: [
         InkWell(
           child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             child: Container(
               padding: EdgeInsets.all(padding),
               height: 50,
@@ -400,7 +456,9 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        const SizedBox(height: 5),
+        const SizedBox(
+          height: 5,
+        ),
         TextWidget(
           txt,
           16,
