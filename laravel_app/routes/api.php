@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/household-assistants', [HouseholdAssistantController::class, 'index']);
 Route::get('/assistants/{id}', [HouseholdAssistantController::class, 'show']);
+Route::post('/store', [HouseholdAssistantController::class, 'store']);
 
 Route::post('/orders', [OrderController::class, 'create']);
 Route::get('/getRiwayat', [OrderController::class, 'getOrders']);

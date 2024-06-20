@@ -15,4 +15,6 @@ class HouseholdAssistant extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    
 }
