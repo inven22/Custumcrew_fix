@@ -41,6 +41,64 @@ class HouseholdAssistantController extends Controller
             'data' => $householdAssistant
         ], 201);
     }
+
+    public function update(Request $request, $id)
+{
+    // Validasi data masukan
+    $request->validate([
+        'name' => 'sometimes|required|string|max:255',
+        'email' => 'sometimes|required|email|unique:household_assistants,email,' . $id,
+        'phone' => 'sometimes|required|string|max:20',
+        'speciality' => 'sometimes|required|string|max:255',
+    ]);
+
+    // Temukan HouseholdAssistant berdasarkan ID
+    $householdAssistant = HouseholdAssistant::find($id);
+
+    // Periksa apakah HouseholdAssistant ditemukan
+    if (!$householdAssistant) {
+        return response()->json([
+            'message' => 'Household Assistant not found!'
+        ], 404);
+    }
+
+    // Update data HouseholdAssistant
+    $householdAssistant->update([
+        'name' => $request->has('name') ? $request->name : $householdAssistant->name,
+        'email' => $request->has('email') ? $request->email : $householdAssistant->email,
+        'phone' => $request->has('phone') ? $request->phone : $householdAssistant->phone,
+        'speciality' => $request->has('speciality') ? $request->speciality : $householdAssistant->speciality,
+    ]);
+
+    // Kembalikan respons dengan data yang diperbarui
+    return response()->json([
+        'message' => 'Household Assistant updated successfully!',
+        'data' => $householdAssistant
+    ], 200);
+}
+
+public function destroy($id)
+{
+    // Temukan HouseholdAssistant berdasarkan ID
+    $householdAssistant = HouseholdAssistant::find($id);
+
+    // Periksa apakah HouseholdAssistant ditemukan
+    if (!$householdAssistant) {
+        return response()->json([
+            'message' => 'Household Assistant not found!'
+        ], 404);
+    }
+
+    // Hapus HouseholdAssistant
+    $householdAssistant->delete();
+
+    // Kembalikan respons
+    return response()->json([
+        'message' => 'Household Assistant deleted successfully!'
+    ], 200);
+}
+
+
 }
 
 
