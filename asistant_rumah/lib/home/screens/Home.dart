@@ -12,11 +12,12 @@ import 'pesan.dart';
 import 'More_art.dart';
 import 'Notification.dart';
 import 'riwayat.dart';
+import 'cleaning.dart';
+import 'babyC.dart';
+import 'OfficeC.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
-
-  get image => null;
+  const Home({Key? key}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -28,24 +29,17 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
       animator();
-
-      setState(() {});
     });
   }
 
-  animator() {
-    if (opacity == 1) {
-      opacity = 0;
-      position = false;
-    } else {
-      opacity = 1;
-      position = true;
-    }
-    setState(() {});
+  void animator() {
+    setState(() {
+      opacity = opacity == 1 ? 0 : 1;
+      position = !position;
+    });
   }
 
   @override
@@ -73,10 +67,22 @@ class _HomeState extends State<Home> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextWidget("Selamat datang", 17,
-                              Colors.black.withOpacity(.7), FontWeight.bold),
-                          TextWidget(
-                              "Ahmad", 25, Colors.black, FontWeight.bold),
+                          Text(
+                            "Selamat datang",
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: Colors.black.withOpacity(.7),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "Ahmad",
+                            style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ],
                       ),
                       IconButton(
@@ -85,7 +91,8 @@ class _HomeState extends State<Home> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => NotificationPage()),
+                              builder: (context) => NotificationPage(),
+                            ),
                           );
                         },
                       )
@@ -110,13 +117,14 @@ class _HomeState extends State<Home> {
                     ),
                     child: TextFormField(
                       decoration: InputDecoration(
-                          border: InputBorder.none,
-                          prefixIcon: Icon(
-                            Icons.search_sharp,
-                            size: 30,
-                            color: Colors.black.withOpacity(.5),
-                          ),
-                          hintText: "   Cari Asistant rumah tangga"),
+                        border: InputBorder.none,
+                        prefixIcon: Icon(
+                          Icons.search_sharp,
+                          size: 30,
+                          color: Colors.black.withOpacity(.5),
+                        ),
+                        hintText: "   Cari Assistant rumah tangga",
+                      ),
                     ),
                   ),
                 ),
@@ -138,15 +146,10 @@ class _HomeState extends State<Home> {
                       width: MediaQuery.of(context).size.width,
                       child: Stack(
                         children: [
-                          // Gambar dari online
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
+                          Positioned.fill(
                             child: Image.network(
                               'https://media.istockphoto.com/vectors/volunteers-cleaning-beach-pickup-garbage-on-river-or-lake-shore-man-vector-id1310872620?k=20&m=1310872620&s=612x612&w=0&h=QNP_-Kl3tXY6ZHzq6RUuEXt0dH-NDiVA3udNeyPJ0Ns=',
                               fit: BoxFit.cover,
-                              height: 150,
                             ),
                           ),
                         ],
@@ -157,55 +160,52 @@ class _HomeState extends State<Home> {
               ),
               categoryRow(),
               AnimatedPositioned(
-                  top: position ? 420 : 500,
-                  left: 20,
-                  right: 20,
-                  duration: const Duration(milliseconds: 400),
-                  child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 300),
-                    opacity: opacity,
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextWidget(
-                            "Rekomendasi",
-                            25,
-                            Colors.black.withOpacity(.8),
-                            FontWeight.bold,
-                            letterSpace: 0,
+                top: position ? 420 : 500,
+                left: 20,
+                right: 20,
+                duration: const Duration(milliseconds: 400),
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 300),
+                  opacity: opacity,
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Rekomendasi",
+                          style: TextStyle(
+                            fontSize: 25,
+                            color: Colors.black.withOpacity(.8),
+                            fontWeight: FontWeight.bold,
                           ),
-                          InkWell(
-                              onTap: () async {
-                                animator();
-                                setState(() {});
-                                // Timer(Duration(seconds: 1),() {
-                                //   Navigator.push(context, MaterialPageRoute(builder: (context) => SeeAll(),));
-                                //   animator();
-                                // },);
-                                await Future.delayed(
-                                    const Duration(milliseconds: 500));
-                                await Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) {
-                                    return moreart();
-                                  },
-                                ));
-
-                                setState(() {
-                                  animator();
-                                });
-                              },
-                              child: TextWidget(
-                                "Lihat semua art",
-                                15,
-                                Colors.blue.shade600.withOpacity(.8),
-                                FontWeight.bold,
-                                letterSpace: 0,
-                              )),
-                        ],
-                      ),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            animator();
+                            await Future.delayed(
+                                const Duration(milliseconds: 500));
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => moreart(),
+                              ),
+                            );
+                            animator();
+                          },
+                          child: Text(
+                            "Lihat semua art",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.blue.shade600.withOpacity(.8),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  )),
+                  ),
+                ),
+              ),
               doctorList(),
               Align(
                 alignment: Alignment.bottomCenter,
@@ -235,10 +235,11 @@ class _HomeState extends State<Home> {
                         onTap: () {
                           Timer(const Duration(milliseconds: 600), () {
                             Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => pesan(),
-                                ));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => pesan(),
+                              ),
+                            );
                           });
                         },
                         child: AnimatedOpacity(
@@ -251,10 +252,11 @@ class _HomeState extends State<Home> {
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AccountScreen(),
-                              ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AccountScreen(),
+                            ),
+                          );
                         },
                         child: Icon(Icons.account_circle_outlined,
                             color: Colors.black, size: 30),
@@ -279,43 +281,34 @@ class _HomeState extends State<Home> {
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 400),
         opacity: opacity,
-        child: AnimatedOpacity(
-          opacity: opacity,
-          duration: const Duration(milliseconds: 300),
-          child: SizedBox(
-            height: 270,
-            width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: () async {
-                      // {
-                      //    animator();
-                      //    await Future.delayed(const Duration(milliseconds: 400));
-                      //    var image;
-                      //    await Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(image: widget.image,name: widget.name,speciality: widget.specialist),));
-                      //     animator();
-                      // }
-                    },
-                    child: doctorCard(names[0], spacilality[0], images[0]),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      // Action when the second doctor card is tapped
-                      // You can navigate to a new screen or perform any other action
-                    },
-                    child: doctorCard(names[1], spacilality[1], images[1]),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      // Action when the third doctor card is tapped
-                      // You can navigate to a new screen or perform any other action
-                    },
-                    child: doctorCard(names[2], spacilality[2], images[2]),
-                  ),
-                ],
-              ),
+        child: SizedBox(
+          height: 270,
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    // Action when the first doctor card is tapped
+                    // You can navigate to a new screen or perform any other action
+                  },
+                  child: doctorCard("Dr. Sarah", "Pediatrician", AssetImage('assets/images/doctor1.jpg')),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    // Action when the second doctor card is tapped
+                    // You can navigate to a new screen or perform any other action
+                  },
+                  child: doctorCard("Dr. John", "Dermatologist", AssetImage('assets/images/doctor2.jpg')),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    // Action when the third doctor card is tapped
+                    // You can navigate to a new screen or perform any other action
+                  },
+                  child: doctorCard("Dr. Emily", "Gynecologist", AssetImage('assets/images/doctor3.jpg')),
+                ),
+              ],
             ),
           ),
         ),
@@ -348,55 +341,42 @@ class _HomeState extends State<Home> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextWidget(
+                Text(
                   name,
-                  20,
-                  Colors.black,
-                  FontWeight.bold,
-                  letterSpace: 0,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(
                   height: 5,
                 ),
-                TextWidget(
+                Text(
                   specialist,
-                  17,
-                  Colors.black,
-                  FontWeight.bold,
-                  letterSpace: 0,
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(
                   height: 5,
                 ),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
+                  children: List.generate(
+                    5,
+                    (index) => Icon(
                       Icons.star,
                       color: Colors.orangeAccent,
                     ),
-                    Icon(
-                      Icons.star,
-                      color: Colors.orangeAccent,
-                    ),
-                    Icon(
-                      Icons.star,
-                      color: Colors.orangeAccent,
-                    ),
-                    Icon(
-                      Icons.star,
-                      color: Colors.orangeAccent,
-                    ),
-                    Icon(
-                      Icons.star,
-                      color: Colors.orangeAccent,
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
             const Spacer(),
-            const Icon(
+            Icon(
               Icons.navigation_sharp,
               color: Colors.blue,
             ),
@@ -411,35 +391,73 @@ class _HomeState extends State<Home> {
 
   Widget categoryRow() {
     return AnimatedPositioned(
-        top: position ? 320 : 420,
-        left: 25,
-        right: 25,
+      top: position ? 320 : 420,
+      left: 25,
+      right: 25,
+      duration: const Duration(milliseconds: 400),
+      child: AnimatedOpacity(
         duration: const Duration(milliseconds: 400),
-        child: AnimatedOpacity(
-          duration: const Duration(milliseconds: 400),
-          opacity: opacity,
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                category("assets/images/clean.png", "Cleaning", 10),
-                category("assets/images/baby.png", "Baby.C", 15),
-                category("assets/images/ofice.png", "Office.C", 10),
-                category("assets/images/app.png", "Lainnya", 12),
-              ],
-            ),
+        opacity: opacity,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              category(
+                "assets/images/clean.png",
+                "Cleaning",
+                10,
+             () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ServiceHomePage(), // Ganti dengan halaman yang sesuai
+    ),
+  );
+},
+              ),
+              category(
+                "assets/images/baby.png",
+                "Baby.C",
+                15,
+                 () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => babystrrers(), // Ganti dengan halaman yang sesuai
+    ),
+  );
+},
+              ),
+              category(
+                "assets/images/ofice.png",
+                "Office.C",
+                10,
+                 () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => office(), // Ganti dengan halaman yang sesuai
+    ),
+  );
+},
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
-  Widget category(String asset, String txt, double padding) {
+  Widget category(String asset, String txt, double padding, VoidCallback onTap) {
     return Column(
       children: [
         InkWell(
+          onTap: onTap,
           child: Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: Container(
               padding: EdgeInsets.all(padding),
               height: 50,
@@ -456,15 +474,17 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        const SizedBox(
+        SizedBox(
           height: 5,
         ),
-        TextWidget(
+        Text(
           txt,
-          16,
-          Colors.black,
-          FontWeight.bold,
-          letterSpace: 1,
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1,
+          ),
         ),
       ],
     );
