@@ -39,5 +39,6 @@ Route::get('/getRiwayat', [OrderController::class, 'getOrders']);
 Route::get('/getNotifications', [NotificationController::class, 'getNotif']);
 
 Route::get('/ratings', [RatingController::class, 'index']);
-Route::post('/ratings', [RatingController::class, 'store']);
+Route::post('/ratings_store', [RatingController::class, 'store']);
 Route::get('/ratings/{id}', [RatingController::class, 'show']);
+
