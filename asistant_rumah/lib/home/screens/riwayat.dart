@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'rating.dart';
+
 
 class RiwayatPesananPage extends StatefulWidget {
   @override
@@ -10,6 +12,8 @@ class RiwayatPesananPage extends StatefulWidget {
 class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTickerProviderStateMixin {
   List orders = [];
   late TabController _tabController;
+  int ratingCount = 0; // Counter for rating submissions
+  Map<int, double> ratedOrders = {}; // Map to store ratings for each order ID
 
   @override
   void initState() {
@@ -29,55 +33,65 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
     }
   }
 
-  void _showRatingDialog() {
+  void _showRatingDialog(int orderId) {
+    double initialRating = ratedOrders.containsKey(orderId) ? ratedOrders[orderId]! : 0.0;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        double rating = 0.0;
-        return AlertDialog(
-          title: Text("Beri Penilaian"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("Silakan berikan penilaian Anda:"),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(5, (index) {
-                  return IconButton(
-                    icon: Icon(
-                      index < rating ? Icons.star : Icons.star_border,
-                      color: Colors.amber,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        rating = index + 1.0;
-                      });
-                    },
-                  );
-                }),
+        double rating = initialRating;
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text("Beri Penilaian"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Silakan berikan penilaian Anda:"),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(5, (index) {
+                      return IconButton(
+                        icon: Icon(
+                          index < rating ? Icons.star : Icons.star_border,
+                          color: Colors.amber,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            rating = index + 1.0;
+                          });
+                        },
+                      );
+                    }),
+                  ),
+                ],
               ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text("Batal"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).primaryColor,
-                onPrimary: Colors.white,
-              ),
-              onPressed: () {
-                print('Rating diberikan: $rating');
-                Navigator.of(context).pop();
-              },
-              child: Text("Simpan"),
-            ),
-          ],
+              actions: <Widget>[
+                TextButton(
+                  child: Text("Batal"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).primaryColor,
+                    onPrimary: Colors.white,
+                  ),
+                  onPressed: () {
+                    print('Rating diberikan: $rating');
+                    setState(() {
+                      ratedOrders[orderId] = rating; // Save rating for this order
+                      ratingCount++; // Increment count on each rating
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Simpan"),
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -148,6 +162,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                   itemCount: orders.length,
                   itemBuilder: (context, index) {
                     final order = orders[index];
+                    final orderId = order['household_assistant_id'];
+
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Card(
@@ -164,7 +180,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                               children: [
                                 CircleAvatar(
                                   child: Text(
-                                    order['household_assistant_id'].toString(),
+                                    orderId.toString(),
                                   ),
                                 ),
                                 SizedBox(width: 12),
@@ -173,7 +189,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'ID: ${order['household_assistant_id']}',
+                                        'ID: $orderId',
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -192,7 +208,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                                         alignment: Alignment.centerRight,
                                         child: ElevatedButton(
                                           onPressed: () {
-                                            _showRatingDialog();
+                                            _showRatingDialog(orderId);
                                           },
                                           style: ElevatedButton.styleFrom(
                                             primary: Theme.of(context).primaryColor,
@@ -202,7 +218,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                                             ),
                                           ),
                                           child: Text(
-                                            'Beri Penilaian',
+                                            ratedOrders.containsKey(orderId) ? 'Edit Rating' : 'Beri Penilaian',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
