@@ -116,7 +116,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
           tabs: [
             Tab(text: 'Upcoming'),
             Tab(text: 'History'),
-            Tab(text: 'Draft'),
+           
           ],
         ),
       ),
@@ -247,7 +247,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                   },
                 ),
           Center(child: Text("History Orders")),  // Placeholder for History tab
-          Center(child: Text("Draft Orders")),    // Placeholder for Draft tab
+          
         ],
       ),
     );

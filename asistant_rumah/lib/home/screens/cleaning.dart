@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Home.dart'; // Pastikan file Home.dart ada di direktori yang benar
+import 'package:asistant_rumah/home/res/lists.dart';
 
 void main() {
   runApp(MyApp());
@@ -80,8 +81,9 @@ class ServiceHomePage extends StatelessWidget {
               child: ListView(
                 children: [
                   ServiceCard(
-                    imageUrl: 'https://via.placeholder.com/150',
+                   imageUrl: ('assets/images/art2.png'),
                     nama: 'John Doe',
+                    harga: 'Rp. 20.000/Per jam',
                     title: 'Cleaning',
                     rating: 4.8,
                     reviews: 37,
@@ -101,6 +103,7 @@ class ServiceHomePage extends StatelessWidget {
 class ServiceCard extends StatelessWidget {
   final String imageUrl;
   final String nama;
+  final String harga;
   final String title;
   final double rating;
   final int reviews;
@@ -108,6 +111,7 @@ class ServiceCard extends StatelessWidget {
   ServiceCard({
     required this.imageUrl,
     required this.nama,
+    required this.harga,
     required this.title,
     required this.rating,
     required this.reviews,
@@ -147,6 +151,15 @@ class ServiceCard extends StatelessWidget {
                       fontSize: 11,
                     ),
                   ),
+
+                   Text(
+                    harga,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                  
                   SizedBox(height: 5),
                   Row(
                     children: [

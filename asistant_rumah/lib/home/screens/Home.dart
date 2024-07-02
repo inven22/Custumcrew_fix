@@ -15,6 +15,7 @@ import 'riwayat.dart';
 import 'cleaning.dart';
 import 'babyC.dart';
 import 'OfficeC.dart';
+import 'all_categori.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -148,7 +149,7 @@ class _HomeState extends State<Home> {
                         children: [
                           Positioned.fill(
                             child: Image.network(
-                              'https://media.istockphoto.com/vectors/volunteers-cleaning-beach-pickup-garbage-on-river-or-lake-shore-man-vector-id1310872620?k=20&m=1310872620&s=612x612&w=0&h=QNP_-Kl3tXY6ZHzq6RUuEXt0dH-NDiVA3udNeyPJ0Ns=',
+                              ('assets/images/home.jpg'),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -441,7 +442,23 @@ class _HomeState extends State<Home> {
     ),
   );
 },
+
+
               ),
+               category(
+                "assets/images/app.png",
+                "Lainnya",
+                10,
+             () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => kategoriPage(), // Ganti dengan halaman yang sesuai
+    ),
+  );
+},
+               ),
+              
             ],
           ),
         ),
