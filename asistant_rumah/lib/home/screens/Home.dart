@@ -148,7 +148,7 @@ class _HomeState extends State<Home> {
                         children: [
                           Positioned.fill(
                             child: Image.network(
-                              'https://media.istockphoto.com/vectors/volunteers-cleaning-beach-pickup-garbage-on-river-or-lake-shore-man-vector-id1310872620?k=20&m=1310872620&s=612x612&w=0&h=QNP_-Kl3tXY6ZHzq6RUuEXt0dH-NDiVA3udNeyPJ0Ns=',
+                              ('assets/images/home.jpg'),
                               fit: BoxFit.cover,
                             ),
                           ),
