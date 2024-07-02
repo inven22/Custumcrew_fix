@@ -6,6 +6,7 @@ use App\Http\Controllers\NotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\HouseholdAssistantController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,12 +21,15 @@ use App\Http\Controllers\RatingController;
 
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
-use App\Http\Controllers\HouseholdAssistantController;
+
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth:sanctum')->get('/profile', [AuthController::class, 'profile']);
+// Route::get('/profile', [AuthController::class, 'profile']);
 
 Route::get('/household-assistants', [HouseholdAssistantController::class, 'index']);
 Route::get('/assistants/{id}', [HouseholdAssistantController::class, 'show']);

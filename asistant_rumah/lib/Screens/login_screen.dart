@@ -84,7 +84,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent, // Hapus warna latar belakang AppBar
+        backgroundColor:
+            Colors.transparent, // Hapus warna latar belakang AppBar
         elevation: 0,
         title: const Text(
           'Login',
@@ -105,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         child: Padding(
-           padding: const EdgeInsets.fromLTRB(19, 19, 19, 19), // Sedikit ke atas
+          padding: const EdgeInsets.fromLTRB(19, 19, 19, 19), // Sedikit ke atas
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -119,7 +120,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: InputDecoration(
                   hintText: 'Email',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20), // Lengkungan di setiap sisi
+                    borderRadius:
+                        BorderRadius.circular(20), // Lengkungan di setiap sisi
                     borderSide: BorderSide(color: Colors.black),
                   ),
                 ),
@@ -133,7 +135,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: InputDecoration(
                   hintText: 'Password',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20), // Lengkungan di setiap sisi
+                    borderRadius:
+                        BorderRadius.circular(20), // Lengkungan di setiap sisi
                     borderSide: BorderSide(color: Colors.black),
                   ),
                 ),
@@ -146,7 +149,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (BuildContext context) => RegisterScreen()), // Pindah ke halaman pendaftaran
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            RegisterScreen()), // Pindah ke halaman pendaftaran
                   );
                 },
                 child: Text(
@@ -164,7 +169,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   child: _isLoggingIn
                       ? CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
                         )
                       : Text(
                           'Log In',
@@ -178,7 +184,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   primary: Colors.blue, // Warna tombol biru
                   onPrimary: Colors.white, // Warna teks putih
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20), // Lengkungan di setiap sisi
+                    borderRadius:
+                        BorderRadius.circular(20), // Lengkungan di setiap sisi
                   ),
                 ),
               ),

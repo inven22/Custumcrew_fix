@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:asistant_rumah/Services/globals.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthServices {
   static Future<http.Response> register(
@@ -34,7 +34,28 @@ class AuthServices {
       headers: headers,
       body: body,
     );
+
+    if (response.statusCode == 200) {
+      Map responseMap = jsonDecode(response.body);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', responseMap['token']);
+    }
+
     print(response.body);
+    return response;
+  }
+
+  static Future<http.Response> getProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+
+    http.Response response = await http.get(
+      Uri.parse(baseURL + 'profile'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
     return response;
   }
 }

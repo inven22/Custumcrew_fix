@@ -1,20 +1,74 @@
 import 'package:asistant_rumah/home/screens/edit_screen.dart';
 import 'package:asistant_rumah/home/widgets/forward_button.dart';
 import 'package:asistant_rumah/home/widgets/setting_item.dart';
-import 'package:asistant_rumah/home/widgets/setting_switch.dart';
+// import 'package:asistant_rumah/home/widgets/setting_switch.dart';
 import 'package:asistant_rumah/home/screens/Home.dart';
 import 'package:asistant_rumah/Screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:asistant_rumah/Services/auth_services.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
 
 class AccountScreen extends StatefulWidget {
-  const AccountScreen({super.key});
+  const AccountScreen({Key? key}) : super(key: key);
 
   @override
-  State<AccountScreen> createState() => _AccountScreenState();
+  _AccountScreenState createState() => _AccountScreenState();
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  String _userName = 'Loading...';
+  String _token = ''; // Declare token variable
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProfile();
+    loadToken(); // Call function to load token
+  }
+
+  loadToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _token = prefs.getString('token') ?? '';
+      print('Token: $_token'); // Print token for debugging
+    });
+  }
+
+  fetchProfile() async {
+    try {
+      http.Response response = await AuthServices.getProfile();
+      print('Response: ${response}');
+      print('Response Status Code: ${response.statusCode}');
+      print(
+          'Profile Response: ${response.body}'); // Cetak respons untuk debugging
+      if (response.statusCode == 200) {
+        Map responseMap = jsonDecode(response.body);
+        if (responseMap['user'] != null &&
+            responseMap['user']['name'] != null) {
+          setState(() {
+            _userName = responseMap['user']['name'];
+          });
+        } else {
+          setState(() {
+            _userName = 'User data not available';
+          });
+        }
+      } else {
+        setState(() {
+          _userName = 'Error: ${response.statusCode}';
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+      setState(() {
+        _userName = 'Error';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,24 +113,16 @@ class _AccountScreenState extends State<AccountScreen> {
                     Image.asset("assets/images/avatar.png",
                         width: 70, height: 70),
                     const SizedBox(width: 20),
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Ahmad",
-                          style: TextStyle(
+                          _userName,
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(height: 10),
-                        Text(
-                          "Pelanggan",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                        )
                       ],
                     ),
                     const Spacer(),
@@ -107,7 +153,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 icon: Ionicons.earth,
                 bgColor: Colors.orange.shade100,
                 iconColor: Colors.orange,
-                value: "indonesia",
+                value: "Indonesia",
                 onTap: () {},
               ),
               const SizedBox(height: 20),
@@ -136,7 +182,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LoginScreen(),
+                      builder: (context) => const LoginScreen(),
                     ),
                   );
                 },
