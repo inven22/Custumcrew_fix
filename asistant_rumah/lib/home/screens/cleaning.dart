@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Home.dart'; // Pastikan file Home.dart ada di direktori yang benar
+import 'package:asistant_rumah/home/res/lists.dart';
 
 void main() {
   runApp(MyApp());
@@ -80,7 +81,7 @@ class ServiceHomePage extends StatelessWidget {
               child: ListView(
                 children: [
                   ServiceCard(
-                    imageUrl: 'https://via.placeholder.com/150',
+                    imageUrl: 'assets/images/doctor1.jpg',
                     nama: 'John Doe',
                     title: 'Cleaning',
                     rating: 4.8,

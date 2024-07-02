@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'rating.dart';
-
 
 class RiwayatPesananPage extends StatefulWidget {
   @override
@@ -10,7 +8,8 @@ class RiwayatPesananPage extends StatefulWidget {
 }
 
 class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTickerProviderStateMixin {
-  List orders = [];
+  List upcomingOrders = [];
+  List historyOrders = [];
   late TabController _tabController;
   int ratingCount = 0; // Counter for rating submissions
   Map<int, double> ratedOrders = {}; // Map to store ratings for each order ID
@@ -18,7 +17,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     fetchOrders();
   }
 
@@ -26,7 +25,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
     final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/getRiwayat'));
     if (response.statusCode == 200) {
       setState(() {
-        orders = json.decode(response.body);
+        upcomingOrders = json.decode(response.body);
       });
     } else {
       throw Exception('Failed to load orders');
@@ -97,6 +96,19 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
     );
   }
 
+  void _moveOrderToHistory(int orderId) {
+    setState(() {
+      // Find the order in upcomingOrders
+      final order = upcomingOrders.firstWhere((order) => order['household_assistant_id'] == orderId);
+      // Remove the order from upcomingOrders
+      upcomingOrders.remove(order);
+      // Add the order to historyOrders
+      historyOrders.add(order);
+      // Switch to the History tab
+      _tabController.index = 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,14 +119,13 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
           tabs: [
             Tab(text: 'Upcoming'),
             Tab(text: 'History'),
-            Tab(text: 'Draft'),
           ],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
         children: [
-          orders.isEmpty
+          upcomingOrders.isEmpty
               ? Center(
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -159,9 +170,9 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                   ),
                 )
               : ListView.builder(
-                  itemCount: orders.length,
+                  itemCount: upcomingOrders.length,
                   itemBuilder: (context, index) {
-                    final order = orders[index];
+                    final order = upcomingOrders[index];
                     final orderId = order['household_assistant_id'];
 
                     return Padding(
@@ -206,23 +217,47 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                                       SizedBox(height: 8),
                                       Align(
                                         alignment: Alignment.centerRight,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            _showRatingDialog(orderId);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Theme.of(context).primaryColor,
-                                            onPrimary: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(20),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                _showRatingDialog(orderId);
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                primary: Theme.of(context).primaryColor,
+                                                onPrimary: Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(20),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                ratedOrders.containsKey(orderId) ? 'Edit Rating' : 'Beri Penilaian',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                          child: Text(
-                                            ratedOrders.containsKey(orderId) ? 'Edit Rating' : 'Beri Penilaian',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
+                                            SizedBox(width: 8),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                _moveOrderToHistory(orderId);
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                primary: Colors.grey,
+                                                onPrimary: Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(20),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                'Tandai selesai',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
                                             ),
-                                          ),
+                                          ],
                                         ),
                                       ),
                                     ],
@@ -236,8 +271,64 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                     );
                   },
                 ),
-          Center(child: Text("History Orders")),  // Placeholder for History tab
-          Center(child: Text("Draft Orders")),    // Placeholder for Draft tab
+          historyOrders.isEmpty
+              ? Center(child: Text("No History Orders"))
+              : ListView.builder(
+                  itemCount: historyOrders.length,
+                  itemBuilder: (context, index) {
+                    final order = historyOrders[index];
+                    final orderId = order['household_assistant_id'];
+
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: InkWell(
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CircleAvatar(
+                                  child: Text(
+                                    orderId.toString(),
+                                  ),
+                                ),
+                                SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'ID: $orderId',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text(
+                                        'Service Date: ${order['service_date']}',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
         ],
       ),
     );
