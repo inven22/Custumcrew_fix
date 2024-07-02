@@ -81,7 +81,7 @@ class ServiceHomePage extends StatelessWidget {
               child: ListView(
                 children: [
                   ServiceCard(
-                    imageUrl: 'assets/images/doctor1.jpg',
+                   imageUrl: ('assets/images/art2.png'),
                     nama: 'John Doe',
                     title: 'Cleaning',
                     rating: 4.8,
