@@ -15,6 +15,7 @@ import 'riwayat.dart';
 import 'cleaning.dart';
 import 'babyC.dart';
 import 'OfficeC.dart';
+import 'all_categori.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -441,7 +442,23 @@ class _HomeState extends State<Home> {
     ),
   );
 },
+
+
               ),
+               category(
+                "assets/images/app.png",
+                "Lainnya",
+                10,
+             () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => kategoriPage(), // Ganti dengan halaman yang sesuai
+    ),
+  );
+},
+               ),
+              
             ],
           ),
         ),
