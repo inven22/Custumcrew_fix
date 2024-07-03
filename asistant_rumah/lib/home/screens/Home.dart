@@ -207,9 +207,9 @@ class _HomeState extends State<Home> {
                 top: position ? 420 : 500,
                 left: 20,
                 right: 20,
-                duration: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 40),
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 30),
                   opacity: opacity,
                   child: Container(
                     child: Row(
@@ -227,7 +227,7 @@ class _HomeState extends State<Home> {
                           onTap: () async {
                             animator();
                             await Future.delayed(
-                                const Duration(milliseconds: 500));
+                                const Duration(milliseconds: 50));
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -254,7 +254,7 @@ class _HomeState extends State<Home> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 40),
                   opacity: opacity,
                   child: CurvedNavigationBar(
                     backgroundColor: Colors.white,
@@ -277,7 +277,7 @@ class _HomeState extends State<Home> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Timer(const Duration(milliseconds: 600), () {
+                          Timer(const Duration(milliseconds: 60), () {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -287,7 +287,7 @@ class _HomeState extends State<Home> {
                           });
                         },
                         child: AnimatedOpacity(
-                          duration: const Duration(milliseconds: 400),
+                          duration: const Duration(milliseconds: 40),
                           opacity: opacity,
                           child: Icon(Icons.message,
                               color: Colors.black, size: 30),
@@ -321,9 +321,9 @@ class _HomeState extends State<Home> {
       top: position ? 460 : 550,
       left: 20,
       right: 20,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 40),
       child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 400),
+        duration: const Duration(milliseconds: 40),
         opacity: opacity,
         child: SizedBox(
           height: 270,
@@ -441,9 +441,9 @@ class _HomeState extends State<Home> {
       top: position ? 320 : 420,
       left: 25,
       right: 25,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 40),
       child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 400),
+        duration: const Duration(milliseconds: 40),
         opacity: opacity,
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
