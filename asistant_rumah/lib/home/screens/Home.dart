@@ -207,7 +207,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-              doctorList(),
+              artList(),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: AnimatedOpacity(
@@ -273,7 +273,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget doctorList() {
+  Widget artList() {
     return AnimatedPositioned(
       top: position ? 460 : 550,
       left: 20,
@@ -293,21 +293,21 @@ class _HomeState extends State<Home> {
                     // Action when the first doctor card is tapped
                     // You can navigate to a new screen or perform any other action
                   },
-                  child: doctorCard("Dr. Sarah", "Pediatrician", AssetImage('assets/images/doctor1.jpg')),
+                  child: artCard("Sarah", "Baby sitters","Rp 20.000 / Perhari", AssetImage('assets/images/doctor1.jpg')),
                 ),
                 GestureDetector(
                   onTap: () {
                     // Action when the second doctor card is tapped
                     // You can navigate to a new screen or perform any other action
                   },
-                  child: doctorCard("Dr. John", "Dermatologist", AssetImage('assets/images/doctor2.jpg')),
+                  child: artCard("Jhon dou", "Cleaning","Rp 30.000 / Perhari", AssetImage('assets/images/doctor2.jpg')),
                 ),
                 GestureDetector(
                   onTap: () {
                     // Action when the third doctor card is tapped
                     // You can navigate to a new screen or perform any other action
                   },
-                  child: doctorCard("Dr. Emily", "Gynecologist", AssetImage('assets/images/doctor3.jpg')),
+                  child: artCard("Emily", "Office cleaning","Rp 20.000 / Perhari", AssetImage('assets/images/doctor3.jpg')),
                 ),
               ],
             ),
@@ -317,7 +317,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget doctorCard(String name, String specialist, AssetImage image) {
+  Widget artCard(String name, String specialist,String harga, AssetImage image) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -355,6 +355,14 @@ class _HomeState extends State<Home> {
                 ),
                 Text(
                   specialist,
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  harga,
                   style: TextStyle(
                     fontSize: 17,
                     color: Colors.black,

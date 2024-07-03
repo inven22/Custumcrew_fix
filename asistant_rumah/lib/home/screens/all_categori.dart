@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'Home.dart';
+import 'babyC.dart';
+import 'OfficeC.dart';
+import 'cleaning.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,13 +27,13 @@ class kategoriPage extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-               Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => Home(), // Ganti dengan halaman yang sesuai
-    ),
-  );
-            },
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Home(), // Ganti dengan halaman yang sesuai
+              ),
+            );
+          },
         ),
         title: TextField(
           decoration: InputDecoration(
@@ -49,12 +52,12 @@ class kategoriPage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.search, color: Colors.white),
             onPressed: () {
-               Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => Home(), // Ganti dengan halaman yang sesuai
-    ),
-  );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Home(), // Ganti dengan halaman yang sesuai
+                ),
+              );
             },
           ),
         ],
@@ -76,16 +79,40 @@ class kategoriPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 CategoryItem(
-                  color: Colors.orange,
+                  imagePath: "assets/images/clean.png",
                   label: 'Cleaning',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ServiceHomePage(), // Ganti dengan halaman yang sesuai
+                      ),
+                    );
+                  },
                 ),
                 CategoryItem(
-                  color: Colors.purple,
+                  imagePath: "assets/images/ofice.png",
                   label: 'Office Cleaning',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => office(), // Ganti dengan halaman yang sesuai
+                      ),
+                    );
+                  },
                 ),
                 CategoryItem(
-                  color: Colors.lightBlue,
+                  imagePath: "assets/images/baby.png",
                   label: 'Baby Sitter',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => babystrrers(), // Ganti dengan halaman yang sesuai
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -97,25 +124,30 @@ class kategoriPage extends StatelessWidget {
 }
 
 class CategoryItem extends StatelessWidget {
-  final Color color;
+  final String imagePath;
   final String label;
+  final VoidCallback onTap;
 
-  CategoryItem({required this.color, required this.label});
+  CategoryItem({required this.imagePath, required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: color,
-        ),
-        SizedBox(height: 8),
-        Text(
-          label,
-          style: TextStyle(fontSize: 14),
-        ),
-      ],
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.transparent,
+            child: Image.asset(imagePath),
+          ),
+          SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(fontSize: 14),
+          ),
+        ],
+      ),
     );
   }
 }
