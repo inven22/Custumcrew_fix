@@ -9,7 +9,8 @@ class RiwayatPesananPage extends StatefulWidget {
   _RiwayatPesananPageState createState() => _RiwayatPesananPageState();
 }
 
-class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTickerProviderStateMixin {
+class _RiwayatPesananPageState extends State<RiwayatPesananPage>
+    with SingleTickerProviderStateMixin {
   List upcomingOrders = [];
   List historyOrders = [];
   late TabController _tabController;
@@ -24,7 +25,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
   }
 
   Future<void> fetchOrders() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/getRiwayat'));
+    final response =
+        await http.get(Uri.parse('http://127.0.0.1:8000/api/getRiwayat'));
     if (response.statusCode == 200) {
       setState(() {
         upcomingOrders = json.decode(response.body);
@@ -35,7 +37,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
   }
 
   void _showRatingDialog(int orderId) {
-    double initialRating = ratedOrders.containsKey(orderId) ? ratedOrders[orderId]! : 0.0;
+    double initialRating =
+        ratedOrders.containsKey(orderId) ? ratedOrders[orderId]! : 0.0;
 
     showDialog(
       context: context,
@@ -83,7 +86,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                   onPressed: () {
                     print('Rating diberikan: $rating');
                     setState(() {
-                      ratedOrders[orderId] = rating; // Save rating for this order
+                      ratedOrders[orderId] =
+                          rating; // Save rating for this order
                       ratingCount++; // Increment count on each rating
                     });
                     Navigator.of(context).pop();
@@ -101,7 +105,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
   void _moveOrderToHistory(int orderId) {
     setState(() {
       // Find the order in upcomingOrders
-      final order = upcomingOrders.firstWhere((order) => order['household_assistant_id'] == orderId);
+      final order = upcomingOrders
+          .firstWhere((order) => order['household_assistant_id'] == orderId);
       // Remove the order from upcomingOrders
       upcomingOrders.remove(order);
       // Add the order to historyOrders
@@ -199,7 +204,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                                 SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'ID: $orderId',
@@ -227,14 +233,18 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                                                 _showRatingDialog(orderId);
                                               },
                                               style: ElevatedButton.styleFrom(
-                                                primary: Theme.of(context).primaryColor,
+                                                primary: Theme.of(context)
+                                                    .primaryColor,
                                                 onPrimary: Colors.white,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(20),
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
                                                 ),
                                               ),
                                               child: Text(
-                                                ratedOrders.containsKey(orderId) ? 'Edit Rating' : 'Beri Penilaian',
+                                                ratedOrders.containsKey(orderId)
+                                                    ? 'Edit Rating'
+                                                    : 'Beri Penilaian',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -249,7 +259,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                                                 primary: Colors.grey,
                                                 onPrimary: Colors.white,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(20),
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
                                                 ),
                                               ),
                                               child: Text(
@@ -303,7 +314,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                                 SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'ID: $orderId',
