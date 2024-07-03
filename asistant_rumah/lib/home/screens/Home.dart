@@ -1,14 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:asistant_rumah/home/screens/pesan.dart';
-import 'package:asistant_rumah/home/res/lists.dart';
-import 'package:asistant_rumah/home/widgets/text_widget.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:asistant_rumah/home/screens/account_screen.dart';
-import 'Profile.dart';
-import 'pesan.dart';
 import 'More_art.dart';
 import 'Notification.dart';
 import 'riwayat.dart';
@@ -16,7 +11,6 @@ import 'cleaning.dart';
 import 'babyC.dart';
 import 'OfficeC.dart';
 import 'all_categori.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:asistant_rumah/Services/auth_services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

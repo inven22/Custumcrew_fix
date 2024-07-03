@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:asistant_rumah/Services/auth_services.dart';
 import 'package:asistant_rumah/Services/globals.dart';
 
-import '../rounded_button.dart';
+
 import 'home_screen.dart';
 import 'login_screen.dart';
 import 'package:http/http.dart' as http;
@@ -79,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.green, Colors.white],
+            colors: [Colors.white, Colors.white],
           ),
         ),
         child: Center(
@@ -93,7 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
-                      hintText: 'Name',
+                      hintText: 'Nama',
                       prefixIcon: Icon(Icons.person),
                     ),
                     onChanged: (value) {
@@ -179,7 +179,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       );
                     },
                     child: Text(
-                      'Already have an account? Sign in here',
+                      'Sudah memiliki akun? Masuk disini',
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                         fontWeight: FontWeight.bold,

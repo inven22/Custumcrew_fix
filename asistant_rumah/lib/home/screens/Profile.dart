@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, use_build_context_synchronously, file_names
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:asistant_rumah/home/res/lists.dart';
@@ -35,7 +37,6 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
       animator();
