@@ -10,12 +10,16 @@ class OrderController extends Controller
 {
     public function create(Request $request)
     {
+        // \Log::info('Request data: '. json_encode($request->all()));
+
         // $request->validate([
+        //     'user_id' => 'required|exists:user_id',
         //     'household_assistant_id' => 'required|exists:household_assistants,id',
         //     'service_date' => 'required|date',
         // ]);
 
         $order = new Order;
+        $order->user_id = $request->user_id;
         $order->household_assistant_id = $request->household_assistant_id;
         $order->service_date = $request->service_date;
 

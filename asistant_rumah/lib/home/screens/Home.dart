@@ -1,14 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:asistant_rumah/home/screens/pesan.dart';
-import 'package:asistant_rumah/home/res/lists.dart';
-import 'package:asistant_rumah/home/widgets/text_widget.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:asistant_rumah/home/screens/account_screen.dart';
-import 'Profile.dart';
-import 'pesan.dart';
 import 'More_art.dart';
 import 'Notification.dart';
 import 'riwayat.dart';
@@ -16,6 +11,10 @@ import 'cleaning.dart';
 import 'babyC.dart';
 import 'OfficeC.dart';
 import 'all_categori.dart';
+import 'package:asistant_rumah/Services/auth_services.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -27,12 +26,16 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var opacity = 0.0;
   bool position = false;
+  String _userName = 'Loading...';
+  String _token = '';
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       animator();
+      fetchProfile();
+      loadToken();
     });
   }
 
@@ -41,6 +44,46 @@ class _HomeState extends State<Home> {
       opacity = opacity == 1 ? 0 : 1;
       position = !position;
     });
+  }
+
+  loadToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _token = prefs.getString('token') ?? '';
+      print('Token: $_token'); // Print token for debugging
+    });
+  }
+
+  fetchProfile() async {
+    try {
+      http.Response response = await AuthServices.getProfile();
+      print('Response: ${response}');
+      print('Response Status Code: ${response.statusCode}');
+      print(
+          'Profile Response: ${response.body}'); // Cetak respons untuk debugging
+      if (response.statusCode == 200) {
+        Map responseMap = jsonDecode(response.body);
+        if (responseMap['user'] != null &&
+            responseMap['user']['name'] != null) {
+          setState(() {
+            _userName = responseMap['user']['name'];
+          });
+        } else {
+          setState(() {
+            _userName = 'User data not available';
+          });
+        }
+      } else {
+        setState(() {
+          _userName = 'Error: ${response.statusCode}';
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+      setState(() {
+        _userName = 'Error';
+      });
+    }
   }
 
   @override
@@ -77,7 +120,7 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           Text(
-                            "Ahmad",
+                            _userName,
                             style: TextStyle(
                               fontSize: 25,
                               color: Colors.black,
@@ -164,9 +207,9 @@ class _HomeState extends State<Home> {
                 top: position ? 420 : 500,
                 left: 20,
                 right: 20,
-                duration: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 40),
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 30),
                   opacity: opacity,
                   child: Container(
                     child: Row(
@@ -184,7 +227,7 @@ class _HomeState extends State<Home> {
                           onTap: () async {
                             animator();
                             await Future.delayed(
-                                const Duration(milliseconds: 500));
+                                const Duration(milliseconds: 50));
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -211,7 +254,7 @@ class _HomeState extends State<Home> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 40),
                   opacity: opacity,
                   child: CurvedNavigationBar(
                     backgroundColor: Colors.white,
@@ -234,7 +277,7 @@ class _HomeState extends State<Home> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Timer(const Duration(milliseconds: 600), () {
+                          Timer(const Duration(milliseconds: 60), () {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -244,7 +287,7 @@ class _HomeState extends State<Home> {
                           });
                         },
                         child: AnimatedOpacity(
-                          duration: const Duration(milliseconds: 400),
+                          duration: const Duration(milliseconds: 40),
                           opacity: opacity,
                           child: Icon(Icons.message,
                               color: Colors.black, size: 30),
@@ -278,9 +321,9 @@ class _HomeState extends State<Home> {
       top: position ? 460 : 550,
       left: 20,
       right: 20,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 40),
       child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 400),
+        duration: const Duration(milliseconds: 40),
         opacity: opacity,
         child: SizedBox(
           height: 270,
@@ -293,21 +336,36 @@ class _HomeState extends State<Home> {
                     // Action when the first doctor card is tapped
                     // You can navigate to a new screen or perform any other action
                   },
+<<<<<<< HEAD
                   child: artCard("Sarah", "Baby sitters","Rp 20.000 / Perhari", AssetImage('assets/images/doctor1.jpg')),
+=======
+                  child: doctorCard("Dr. Sarah", "Pediatrician",
+                      AssetImage('assets/images/doctor1.jpg')),
+>>>>>>> fb12e842272ea5fc65364669488d2dac16995d47
                 ),
                 GestureDetector(
                   onTap: () {
                     // Action when the second doctor card is tapped
                     // You can navigate to a new screen or perform any other action
                   },
+<<<<<<< HEAD
                   child: artCard("Jhon dou", "Cleaning","Rp 30.000 / Perhari", AssetImage('assets/images/doctor2.jpg')),
+=======
+                  child: doctorCard("Dr. John", "Dermatologist",
+                      AssetImage('assets/images/doctor2.jpg')),
+>>>>>>> fb12e842272ea5fc65364669488d2dac16995d47
                 ),
                 GestureDetector(
                   onTap: () {
                     // Action when the third doctor card is tapped
                     // You can navigate to a new screen or perform any other action
                   },
+<<<<<<< HEAD
                   child: artCard("Emily", "Office cleaning","Rp 20.000 / Perhari", AssetImage('assets/images/doctor3.jpg')),
+=======
+                  child: doctorCard("Dr. Emily", "Gynecologist",
+                      AssetImage('assets/images/doctor3.jpg')),
+>>>>>>> fb12e842272ea5fc65364669488d2dac16995d47
                 ),
               ],
             ),
@@ -403,9 +461,9 @@ class _HomeState extends State<Home> {
       top: position ? 320 : 420,
       left: 25,
       right: 25,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 40),
       child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 400),
+        duration: const Duration(milliseconds: 40),
         opacity: opacity,
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -416,57 +474,58 @@ class _HomeState extends State<Home> {
                 "assets/images/clean.png",
                 "Cleaning",
                 10,
-             () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => ServiceHomePage(), // Ganti dengan halaman yang sesuai
-    ),
-  );
-},
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ServiceHomePage(), // Ganti dengan halaman yang sesuai
+                    ),
+                  );
+                },
               ),
               category(
                 "assets/images/baby.png",
                 "Baby.C",
                 15,
-                 () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => babystrrers(), // Ganti dengan halaman yang sesuai
-    ),
-  );
-},
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          babystrrers(), // Ganti dengan halaman yang sesuai
+                    ),
+                  );
+                },
               ),
               category(
                 "assets/images/ofice.png",
                 "Office.C",
                 10,
-                 () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => office(), // Ganti dengan halaman yang sesuai
-    ),
-  );
-},
-
-
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          office(), // Ganti dengan halaman yang sesuai
+                    ),
+                  );
+                },
               ),
-               category(
+              category(
                 "assets/images/app.png",
                 "Lainnya",
                 10,
-             () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => kategoriPage(), // Ganti dengan halaman yang sesuai
-    ),
-  );
-},
-               ),
-              
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          kategoriPage(), // Ganti dengan halaman yang sesuai
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -474,7 +533,8 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget category(String asset, String txt, double padding, VoidCallback onTap) {
+  Widget category(
+      String asset, String txt, double padding, VoidCallback onTap) {
     return Column(
       children: [
         InkWell(

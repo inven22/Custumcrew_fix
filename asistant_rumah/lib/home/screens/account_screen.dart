@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:asistant_rumah/home/screens/edit_screen.dart';
 import 'package:asistant_rumah/home/widgets/forward_button.dart';
 import 'package:asistant_rumah/home/widgets/setting_item.dart';
@@ -20,6 +22,7 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   String _userName = 'Loading...';
+  String _userEmail = '';
   String _token = ''; // Declare token variable
 
   @override
@@ -50,6 +53,7 @@ class _AccountScreenState extends State<AccountScreen> {
             responseMap['user']['name'] != null) {
           setState(() {
             _userName = responseMap['user']['name'];
+            _userEmail = responseMap['user']['email'];
           });
         } else {
           setState(() {
@@ -77,7 +81,7 @@ class _AccountScreenState extends State<AccountScreen> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Home()),
+              MaterialPageRoute(builder: (context) => const Home()),
             );
           },
           icon: const Icon(Ionicons.chevron_back_outline),
@@ -123,6 +127,14 @@ class _AccountScreenState extends State<AccountScreen> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
+                        SizedBox(height: 10),
+                        Text(
+                          _userEmail,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        )
                       ],
                     ),
                     const Spacer(),

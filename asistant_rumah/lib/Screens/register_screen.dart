@@ -4,9 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:asistant_rumah/Services/auth_services.dart';
 import 'package:asistant_rumah/Services/globals.dart';
+<<<<<<< HEAD
+=======
 
-import '../rounded_button.dart';
+
 import 'home_screen.dart';
+>>>>>>> 3d9835ad64fd4cf9b0ce4c90d5bddc9aaeb4fafe
 import 'login_screen.dart';
 import 'package:http/http.dart' as http;
 
@@ -79,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.green, Colors.white],
+            colors: [Colors.white, Colors.white],
           ),
         ),
         child: Center(
@@ -93,7 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
-                      hintText: 'Name',
+                      hintText: 'Nama',
                       prefixIcon: Icon(Icons.person),
                     ),
                     onChanged: (value) {
@@ -174,12 +177,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => const LoginScreen(),
+                          builder: (BuildContext context) =>
+                              const LoginScreen(),
                         ),
                       );
                     },
                     child: Text(
-                      'Already have an account? Sign in here',
+                      'Sudah memiliki akun? Masuk disini',
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                         fontWeight: FontWeight.bold,

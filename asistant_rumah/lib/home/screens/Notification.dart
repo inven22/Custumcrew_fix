@@ -1,9 +1,10 @@
+// ignore_for_file: file_names, use_key_in_widget_constructors, library_private_types_in_public_api, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:asistant_rumah/home/widgets/text_widget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:asistant_rumah/home/screens/NotificationModel.dart'; // Import the model
-import 'package:asistant_rumah/home/widgets/text_widget.dart';
+import 'package:asistant_rumah/home/screens/NotificationModel.dart';
 
 class NotificationPage extends StatefulWidget {
   @override

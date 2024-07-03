@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, file_names
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:asistant_rumah/home/screens/pesan.dart';
@@ -35,7 +37,6 @@ class _ChatState extends State<Chat> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
       animator();

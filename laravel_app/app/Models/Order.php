@@ -9,11 +9,16 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['household_assistant_id', 'service_date'];
+    protected $fillable = ['household_assistant_id', 'user_id', 'service_date'];
     public $timestamps = false;
     public function householdAssistant()
     {
         return $this->belongsTo(HouseholdAssistant::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function messages()
