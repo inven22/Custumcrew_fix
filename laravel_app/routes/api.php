@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->get('/profile', [AuthController::class, 'prof
 // Route::get('/profile', [AuthController::class, 'profile']);
 
 Route::get('/household-assistants', [HouseholdAssistantController::class, 'index']);
+Route::get('/household-assistants-category', [HouseholdAssistantController::class, 'category']);
 Route::get('/assistants/{id}', [HouseholdAssistantController::class, 'show']);
 Route::post('/store', [HouseholdAssistantController::class, 'store']);
 Route::put('/household-assistants/{id}', [HouseholdAssistantController::class, 'update']);
