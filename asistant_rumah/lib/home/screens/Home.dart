@@ -16,6 +16,11 @@ import 'cleaning.dart';
 import 'babyC.dart';
 import 'OfficeC.dart';
 import 'all_categori.dart';
+import 'package:ionicons/ionicons.dart';
+import 'package:asistant_rumah/Services/auth_services.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -27,12 +32,16 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var opacity = 0.0;
   bool position = false;
+  String _userName = 'Loading...';
+  String _token = '';
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       animator();
+      fetchProfile();
+      loadToken();
     });
   }
 
@@ -41,6 +50,46 @@ class _HomeState extends State<Home> {
       opacity = opacity == 1 ? 0 : 1;
       position = !position;
     });
+  }
+
+  loadToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _token = prefs.getString('token') ?? '';
+      print('Token: $_token'); // Print token for debugging
+    });
+  }
+
+  fetchProfile() async {
+    try {
+      http.Response response = await AuthServices.getProfile();
+      print('Response: ${response}');
+      print('Response Status Code: ${response.statusCode}');
+      print(
+          'Profile Response: ${response.body}'); // Cetak respons untuk debugging
+      if (response.statusCode == 200) {
+        Map responseMap = jsonDecode(response.body);
+        if (responseMap['user'] != null &&
+            responseMap['user']['name'] != null) {
+          setState(() {
+            _userName = responseMap['user']['name'];
+          });
+        } else {
+          setState(() {
+            _userName = 'User data not available';
+          });
+        }
+      } else {
+        setState(() {
+          _userName = 'Error: ${response.statusCode}';
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+      setState(() {
+        _userName = 'Error';
+      });
+    }
   }
 
   @override
@@ -77,7 +126,7 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           Text(
-                            "Ahmad",
+                            _userName,
                             style: TextStyle(
                               fontSize: 25,
                               color: Colors.black,
@@ -293,21 +342,24 @@ class _HomeState extends State<Home> {
                     // Action when the first doctor card is tapped
                     // You can navigate to a new screen or perform any other action
                   },
-                  child: doctorCard("Dr. Sarah", "Pediatrician", AssetImage('assets/images/doctor1.jpg')),
+                  child: doctorCard("Dr. Sarah", "Pediatrician",
+                      AssetImage('assets/images/doctor1.jpg')),
                 ),
                 GestureDetector(
                   onTap: () {
                     // Action when the second doctor card is tapped
                     // You can navigate to a new screen or perform any other action
                   },
-                  child: doctorCard("Dr. John", "Dermatologist", AssetImage('assets/images/doctor2.jpg')),
+                  child: doctorCard("Dr. John", "Dermatologist",
+                      AssetImage('assets/images/doctor2.jpg')),
                 ),
                 GestureDetector(
                   onTap: () {
                     // Action when the third doctor card is tapped
                     // You can navigate to a new screen or perform any other action
                   },
-                  child: doctorCard("Dr. Emily", "Gynecologist", AssetImage('assets/images/doctor3.jpg')),
+                  child: doctorCard("Dr. Emily", "Gynecologist",
+                      AssetImage('assets/images/doctor3.jpg')),
                 ),
               ],
             ),
@@ -408,57 +460,58 @@ class _HomeState extends State<Home> {
                 "assets/images/clean.png",
                 "Cleaning",
                 10,
-             () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => ServiceHomePage(), // Ganti dengan halaman yang sesuai
-    ),
-  );
-},
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ServiceHomePage(), // Ganti dengan halaman yang sesuai
+                    ),
+                  );
+                },
               ),
               category(
                 "assets/images/baby.png",
                 "Baby.C",
                 15,
-                 () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => babystrrers(), // Ganti dengan halaman yang sesuai
-    ),
-  );
-},
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          babystrrers(), // Ganti dengan halaman yang sesuai
+                    ),
+                  );
+                },
               ),
               category(
                 "assets/images/ofice.png",
                 "Office.C",
                 10,
-                 () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => office(), // Ganti dengan halaman yang sesuai
-    ),
-  );
-},
-
-
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          office(), // Ganti dengan halaman yang sesuai
+                    ),
+                  );
+                },
               ),
-               category(
+              category(
                 "assets/images/app.png",
                 "Lainnya",
                 10,
-             () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => kategoriPage(), // Ganti dengan halaman yang sesuai
-    ),
-  );
-},
-               ),
-              
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          kategoriPage(), // Ganti dengan halaman yang sesuai
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -466,7 +519,8 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget category(String asset, String txt, double padding, VoidCallback onTap) {
+  Widget category(
+      String asset, String txt, double padding, VoidCallback onTap) {
     return Column(
       children: [
         InkWell(
