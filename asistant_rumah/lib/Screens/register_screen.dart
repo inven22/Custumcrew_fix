@@ -4,12 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:asistant_rumah/Services/auth_services.dart';
 import 'package:asistant_rumah/Services/globals.dart';
-<<<<<<< HEAD
-=======
-
-
-import 'home_screen.dart';
->>>>>>> 3d9835ad64fd4cf9b0ce4c90d5bddc9aaeb4fafe
 import 'login_screen.dart';
 import 'package:http/http.dart' as http;
 

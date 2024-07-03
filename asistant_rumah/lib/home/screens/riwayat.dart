@@ -1,8 +1,7 @@
-// ignore_for_file: unused_import
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RiwayatPesananPage extends StatefulWidget {
   @override
@@ -20,7 +19,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    fetchOrders();
+    loadOrders();
   }
 
   Future<void> fetchOrders() async {
@@ -29,8 +28,27 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
       setState(() {
         upcomingOrders = json.decode(response.body);
       });
+      saveOrders();
     } else {
       throw Exception('Failed to load orders');
+    }
+  }
+
+  Future<void> saveOrders() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('upcomingOrders', json.encode(upcomingOrders));
+    await prefs.setString('historyOrders', json.encode(historyOrders));
+  }
+
+  Future<void> loadOrders() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      upcomingOrders = json.decode(prefs.getString('upcomingOrders') ?? '[]');
+      historyOrders = json.decode(prefs.getString('historyOrders') ?? '[]');
+    });
+
+    if (upcomingOrders.isEmpty) {
+      fetchOrders();
     }
   }
 
@@ -81,7 +99,6 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                     onPrimary: Colors.white,
                   ),
                   onPressed: () {
-                    print('Rating diberikan: $rating');
                     setState(() {
                       ratedOrders[orderId] = rating; // Save rating for this order
                       ratingCount++; // Increment count on each rating
@@ -106,6 +123,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
       upcomingOrders.remove(order);
       // Add the order to historyOrders
       historyOrders.add(order);
+      // Save the orders
+      saveOrders();
       // Switch to the History tab
       _tabController.index = 1;
     });
@@ -337,7 +356,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
   }
 }
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
     home: RiwayatPesananPage(),
     theme: ThemeData(

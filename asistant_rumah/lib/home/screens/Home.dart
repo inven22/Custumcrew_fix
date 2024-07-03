@@ -336,36 +336,21 @@ class _HomeState extends State<Home> {
                     // Action when the first doctor card is tapped
                     // You can navigate to a new screen or perform any other action
                   },
-<<<<<<< HEAD
-                  child: artCard("Sarah", "Baby sitters","Rp 20.000 / Perhari", AssetImage('assets/images/doctor1.jpg')),
-=======
-                  child: doctorCard("Dr. Sarah", "Pediatrician",
-                      AssetImage('assets/images/doctor1.jpg')),
->>>>>>> fb12e842272ea5fc65364669488d2dac16995d47
+                  child: artCard("Sarah", "Pediatrician","Rp 30.000 / Perhari", AssetImage('assets/images/doctor1.jpg')),
                 ),
                 GestureDetector(
                   onTap: () {
                     // Action when the second doctor card is tapped
                     // You can navigate to a new screen or perform any other action
                   },
-<<<<<<< HEAD
                   child: artCard("Jhon dou", "Cleaning","Rp 30.000 / Perhari", AssetImage('assets/images/doctor2.jpg')),
-=======
-                  child: doctorCard("Dr. John", "Dermatologist",
-                      AssetImage('assets/images/doctor2.jpg')),
->>>>>>> fb12e842272ea5fc65364669488d2dac16995d47
                 ),
                 GestureDetector(
                   onTap: () {
                     // Action when the third doctor card is tapped
                     // You can navigate to a new screen or perform any other action
                   },
-<<<<<<< HEAD
                   child: artCard("Emily", "Office cleaning","Rp 20.000 / Perhari", AssetImage('assets/images/doctor3.jpg')),
-=======
-                  child: doctorCard("Dr. Emily", "Gynecologist",
-                      AssetImage('assets/images/doctor3.jpg')),
->>>>>>> fb12e842272ea5fc65364669488d2dac16995d47
                 ),
               ],
             ),
