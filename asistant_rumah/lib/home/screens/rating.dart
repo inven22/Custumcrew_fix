@@ -7,7 +7,8 @@ class RiwayatPesananPage extends StatefulWidget {
   _RiwayatPesananPageState createState() => _RiwayatPesananPageState();
 }
 
-class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTickerProviderStateMixin {
+class _RiwayatPesananPageState extends State<RiwayatPesananPage>
+    with SingleTickerProviderStateMixin {
   List orders = [];
   late TabController _tabController;
 
@@ -19,7 +20,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
   }
 
   Future<void> fetchOrders() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/getRiwayat'));
+    final response =
+        await http.get(Uri.parse('http://127.0.0.1:8000/api/getRiwayat'));
     if (response.statusCode == 200) {
       setState(() {
         orders = json.decode(response.body);
@@ -75,7 +77,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                   ),
                   onPressed: () {
                     // Save rating to API
-                    saveRating(orderId,rating);
+                    saveRating(orderId, rating);
                     Navigator.of(context).pop();
                   },
                   child: Text("Simpan"),
@@ -116,7 +118,6 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
           tabs: [
             Tab(text: 'Upcoming'),
             Tab(text: 'History'),
-           
           ],
         ),
       ),
@@ -193,7 +194,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                                 SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'ID: ${order['household_assistant_id']}',
@@ -217,14 +219,15 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                                           onPressed: () {
                                             _showRatingDialog(
                                               order['order_id'],
-                                             
                                             );
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            primary: Theme.of(context).primaryColor,
+                                            primary:
+                                                Theme.of(context).primaryColor,
                                             onPrimary: Colors.white,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(20),
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
                                             ),
                                           ),
                                           child: Text(
@@ -246,8 +249,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                     );
                   },
                 ),
-          Center(child: Text("History Orders")),  // Placeholder for History tab
-          
+          Center(child: Text("History Orders")), // Placeholder for History tab
         ],
       ),
     );

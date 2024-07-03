@@ -4,9 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:asistant_rumah/Services/auth_services.dart';
 import 'package:asistant_rumah/Services/globals.dart';
-
-import '../rounded_button.dart';
-import 'home_screen.dart';
 import 'login_screen.dart';
 import 'package:http/http.dart' as http;
 
@@ -33,7 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => const HomeScreen(),
+              builder: (BuildContext context) => const LoginScreen(),
             ));
       } else {
         errorSnackBar(context, responseMap.values.first[0]);
@@ -174,7 +171,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => const LoginScreen(),
+                          builder: (BuildContext context) =>
+                              const LoginScreen(),
                         ),
                       );
                     },

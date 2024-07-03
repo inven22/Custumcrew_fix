@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:asistant_rumah/Services/auth_services.dart';
-import 'package:asistant_rumah/Services/globals.dart';
-import 'package:asistant_rumah/rounded_button.dart';
 import 'package:http/http.dart' as http;
 import 'package:asistant_rumah/Screens/register_screen.dart'; // Tambahkan import untuk RegisterScreen
 import 'home_screen.dart';

@@ -20,6 +20,7 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   String _userName = 'Loading...';
+  String _userEmail = '';
   String _token = ''; // Declare token variable
 
   @override
@@ -50,6 +51,7 @@ class _AccountScreenState extends State<AccountScreen> {
             responseMap['user']['name'] != null) {
           setState(() {
             _userName = responseMap['user']['name'];
+            _userEmail = responseMap['user']['email'];
           });
         } else {
           setState(() {
@@ -123,6 +125,14 @@ class _AccountScreenState extends State<AccountScreen> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
+                        SizedBox(height: 10),
+                        Text(
+                          _userEmail,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        )
                       ],
                     ),
                     const Spacer(),
