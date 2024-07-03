@@ -3,57 +3,85 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
+void main() {
+  runApp(MaterialApp(
+    home: RiwayatPesananPage(),
+    theme: ThemeData(
+      primarySwatch: Colors.blue,
+    ),
+  ));
+}
+
 class RiwayatPesananPage extends StatefulWidget {
   @override
   _RiwayatPesananPageState createState() => _RiwayatPesananPageState();
 }
 
-class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTickerProviderStateMixin {
+class _RiwayatPesananPageState extends State<RiwayatPesananPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
   List upcomingOrders = [];
   List historyOrders = [];
-  late TabController _tabController;
-  int ratingCount = 0; // Counter for rating submissions
-  Map<int, double> ratedOrders = {}; // Map to store ratings for each order ID
+  int ratingCount = 0;
+  Map<int, double> ratedOrders = {};
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    loadOrders();
+    fetchOrders();
+    loadHistoryOrders();
   }
 
   Future<void> fetchOrders() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/getRiwayat'));
-    if (response.statusCode == 200) {
-      setState(() {
-        upcomingOrders = json.decode(response.body);
-      });
-      saveOrders();
-    } else {
-      throw Exception('Failed to load orders');
+    try {
+      final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/getRiwayat'));
+      if (response.statusCode == 200) {
+        setState(() {
+          upcomingOrders = json.decode(response.body);
+        });
+      } else {
+        throw Exception('Failed to load orders');
+      }
+    } catch (e) {
+      print('Error fetching orders: $e');
+      // Handle error as needed
     }
   }
 
-  Future<void> saveOrders() async {
+  Future<void> loadHistoryOrders() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('upcomingOrders', json.encode(upcomingOrders));
+    String historyOrdersJson = prefs.getString('historyOrders') ?? '[]';
+    setState(() {
+      historyOrders = json.decode(historyOrdersJson);
+    });
+  }
+
+  Future<void> saveHistoryOrders() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('historyOrders', json.encode(historyOrders));
   }
 
-  Future<void> loadOrders() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  void _moveOrderToHistory(int orderId) {
     setState(() {
-      upcomingOrders = json.decode(prefs.getString('upcomingOrders') ?? '[]');
-      historyOrders = json.decode(prefs.getString('historyOrders') ?? '[]');
+      // Find the order in upcomingOrders
+      final orderIndex = upcomingOrders.indexWhere(
+          (order) => order['household_assistant_id'] == orderId);
+      if (orderIndex != -1) {
+        final order = upcomingOrders.removeAt(orderIndex);
+        // Add the order to historyOrders
+        historyOrders.add(order);
+        // Save historyOrders after moving
+        saveHistoryOrders();
+        // Update UI
+        setState(() {});
+      }
     });
-
-    if (upcomingOrders.isEmpty) {
-      fetchOrders();
-    }
   }
 
   void _showRatingDialog(int orderId) {
-    double initialRating = ratedOrders.containsKey(orderId) ? ratedOrders[orderId]! : 0.0;
+    double initialRating =
+        ratedOrders.containsKey(orderId) ? ratedOrders[orderId]! : 0.0;
 
     showDialog(
       context: context,
@@ -99,10 +127,12 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                     onPrimary: Colors.white,
                   ),
                   onPressed: () {
+                    print('Rating diberikan: $rating');
                     setState(() {
-                      ratedOrders[orderId] = rating; // Save rating for this order
-                      ratingCount++; // Increment count on each rating
+                      ratedOrders[orderId] = rating;
+                      ratingCount++;
                     });
+                    _moveOrderToHistory(orderId);
                     Navigator.of(context).pop();
                   },
                   child: Text("Simpan"),
@@ -113,21 +143,6 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
         );
       },
     );
-  }
-
-  void _moveOrderToHistory(int orderId) {
-    setState(() {
-      // Find the order in upcomingOrders
-      final order = upcomingOrders.firstWhere((order) => order['household_assistant_id'] == orderId);
-      // Remove the order from upcomingOrders
-      upcomingOrders.remove(order);
-      // Add the order to historyOrders
-      historyOrders.add(order);
-      // Save the orders
-      saveOrders();
-      // Switch to the History tab
-      _tabController.index = 1;
-    });
   }
 
   @override
@@ -146,6 +161,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
       body: TabBarView(
         controller: _tabController,
         children: [
+          // Tab Upcoming
           upcomingOrders.isEmpty
               ? Center(
                   child: Padding(
@@ -218,7 +234,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                                 SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'ID: $orderId',
@@ -246,14 +263,20 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                                                 _showRatingDialog(orderId);
                                               },
                                               style: ElevatedButton.styleFrom(
-                                                primary: Theme.of(context).primaryColor,
+                                                primary: Theme.of(context)
+                                                    .primaryColor,
                                                 onPrimary: Colors.white,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(20),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20),
                                                 ),
                                               ),
                                               child: Text(
-                                                ratedOrders.containsKey(orderId) ? 'Edit Rating' : 'Beri Penilaian',
+                                                ratedOrders.containsKey(
+                                                        orderId)
+                                                    ? 'Edit Rating'
+                                                    : 'Beri Penilaian',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -268,7 +291,9 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                                                 primary: Colors.grey,
                                                 onPrimary: Colors.white,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(20),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20),
                                                 ),
                                               ),
                                               child: Text(
@@ -292,6 +317,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                     );
                   },
                 ),
+
+          // Tab History
           historyOrders.isEmpty
               ? Center(child: Text("No History Orders"))
               : ListView.builder(
@@ -322,7 +349,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
                                 SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'ID: $orderId',
@@ -354,14 +382,4 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage> with SingleTick
       ),
     );
   }
-}
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(MaterialApp(
-    home: RiwayatPesananPage(),
-    theme: ThemeData(
-      primarySwatch: Colors.blue,
-    ),
-  ));
 }
