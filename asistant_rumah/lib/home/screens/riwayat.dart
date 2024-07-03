@@ -1,8 +1,16 @@
-// ignore_for_file: unused_import
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
+void main() {
+  runApp(MaterialApp(
+    home: RiwayatPesananPage(),
+    theme: ThemeData(
+      primarySwatch: Colors.blue,
+    ),
+  ));
+}
 
 class RiwayatPesananPage extends StatefulWidget {
   @override
@@ -11,17 +19,18 @@ class RiwayatPesananPage extends StatefulWidget {
 
 class _RiwayatPesananPageState extends State<RiwayatPesananPage>
     with SingleTickerProviderStateMixin {
+  late TabController _tabController;
   List upcomingOrders = [];
   List historyOrders = [];
-  late TabController _tabController;
-  int ratingCount = 0; // Counter for rating submissions
-  Map<int, double> ratedOrders = {}; // Map to store ratings for each order ID
+  int ratingCount = 0;
+  Map<int, double> ratedOrders = {};
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     fetchOrders();
+    loadHistoryOrders();
   }
 
   Future<void> fetchOrders() async {
@@ -34,6 +43,50 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
     } else {
       throw Exception('Failed to load orders');
     }
+  }
+
+  Future<void> loadHistoryOrders() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String historyOrdersJson = prefs.getString('historyOrders') ?? '[]';
+    setState(() {
+      historyOrders = json.decode(historyOrdersJson);
+    });
+  }
+
+  Future<void> saveHistoryOrders() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('historyOrders', json.encode(historyOrders));
+  }
+
+  // void _moveOrderToHistory(int orderId) {
+  //   setState(() {
+  //     // Find the order in upcomingOrders
+  //     final orderIndex = upcomingOrders.indexWhere(
+  //         (order) => order['household_assistant_id'] == orderId);
+  //     if (orderIndex != -1) {
+  //       final order = upcomingOrders.removeAt(orderIndex);
+  //       // Add the order to historyOrders
+  //       historyOrders.add(order);
+  //       // Save historyOrders after moving
+  //       saveHistoryOrders();
+  //       // Update UI
+  //       setState(() {});
+  //     }
+  //   });
+  // }
+
+  void _moveOrderToHistory(int orderId) {
+    setState(() {
+      // Find the order in upcomingOrders
+      final order = upcomingOrders
+          .firstWhere((order) => order['household_assistant_id'] == orderId);
+      // Remove the order from upcomingOrders
+      upcomingOrders.remove(order);
+      // Add the order to historyOrders
+      historyOrders.add(order);
+      // Switch to the History tab
+      _tabController.index = 1;
+    });
   }
 
   void _showRatingDialog(int orderId) {
@@ -90,6 +143,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                           rating; // Save rating for this order
                       ratingCount++; // Increment count on each rating
                     });
+                    _moveOrderToHistory(orderId);
                     Navigator.of(context).pop();
                   },
                   child: Text("Simpan"),
@@ -100,20 +154,6 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
         );
       },
     );
-  }
-
-  void _moveOrderToHistory(int orderId) {
-    setState(() {
-      // Find the order in upcomingOrders
-      final order = upcomingOrders
-          .firstWhere((order) => order['household_assistant_id'] == orderId);
-      // Remove the order from upcomingOrders
-      upcomingOrders.remove(order);
-      // Add the order to historyOrders
-      historyOrders.add(order);
-      // Switch to the History tab
-      _tabController.index = 1;
-    });
   }
 
   @override
@@ -132,6 +172,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
       body: TabBarView(
         controller: _tabController,
         children: [
+          // Tab Upcoming
           upcomingOrders.isEmpty
               ? Center(
                   child: Padding(
@@ -284,6 +325,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                     );
                   },
                 ),
+
+          // Tab History
           historyOrders.isEmpty
               ? Center(child: Text("No History Orders"))
               : ListView.builder(
@@ -347,13 +390,4 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: RiwayatPesananPage(),
-    theme: ThemeData(
-      primarySwatch: Colors.blue,
-    ),
-  ));
 }

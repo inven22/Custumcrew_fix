@@ -56,33 +56,26 @@ class _SeeAllState extends State<moreart> {
     return Scaffold(
       body: Container(
         color: Colors.white,
-        padding: EdgeInsets.only(top: 70),
+        padding: EdgeInsets.only(top: 40),
         height: size.height,
         width: size.width,
         child: Stack(
           children: [
             AnimatedPositioned(
-              duration: Duration(milliseconds: 400),
+              duration: Duration(milliseconds: 40),
               top: position ? 1 : 50,
-              left: 20,
-              right: 20,
+              left: 1,
+              right: 1,
               child: upperRow(),
             ),
             AnimatedPositioned(
-              top: position ? 60 : 120,
-              right: 20,
-              left: 20,
-              duration: Duration(milliseconds: 300),
-              child: find(),
-            ),
-            AnimatedPositioned(
-              top: position ? 390 : 450,
-              right: 20,
-              left: 20,
-              duration: Duration(milliseconds: 400),
+              top: position ? 130 : 160,
+              right: 1,
+              left: 1,
+              duration: Duration(milliseconds: 60),
               child: AnimatedOpacity(
                 opacity: opacity,
-                duration: Duration(milliseconds: 400),
+                duration: Duration(milliseconds: 60),
                 child: Container(
                   width: size.width,
                   child: Row(
@@ -108,12 +101,12 @@ class _SeeAllState extends State<moreart> {
               ),
             ),
             AnimatedPositioned(
-              top: position ? 430 : 500,
-              left: 20,
-              right: 20,
-              duration: Duration(milliseconds: 500),
+              top: position ? 180 : 280,
+              left: 1,
+              right: 1,
+              duration: Duration(milliseconds: 40),
               child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 40),
                 opacity: opacity,
                 child: Container(
                   height: 350,
@@ -130,7 +123,7 @@ class _SeeAllState extends State<moreart> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => Profile(
-                                image: AssetImage('assets/default_profile.png'),
+                                image: AssetImage('assets/images/art2.png'),
                                 name: assistant['name'],
                                 speciality: assistant['speciality'],
                                 order: assistant['order'],
@@ -185,6 +178,12 @@ class _SeeAllState extends State<moreart> {
                                       FontWeight.bold,
                                       letterSpace: 0,
                                     ),
+                                    Center(
+                                      child: Text(
+                                        'Harga : 20.000/ Hari',
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                    ),
                                     const SizedBox(
                                       height: 5,
                                     ),
@@ -238,73 +237,10 @@ class _SeeAllState extends State<moreart> {
     );
   }
 
-  Widget find() {
-    return AnimatedOpacity(
-      duration: const Duration(milliseconds: 400),
-      opacity: opacity,
-      child: Card(
-        margin: EdgeInsets.all(4),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Container(
-          height: 250,
-          width: MediaQuery.of(context).size.width * 0.8,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.blue.shade700,
-                Colors.blue.shade900,
-                Colors.blue.shade900,
-              ],
-            ),
-          ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Positioned(
-                top: 5,
-                right: 5,
-                child: Icon(
-                  Icons.close_outlined,
-                  color: Colors.white,
-                  size: 15,
-                ),
-              ),
-              Positioned(
-                bottom: 20,
-                left: 20,
-                right: 20,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: 'Cari asistant',
-                      border: InputBorder.none,
-                      icon: Icon(Icons.search),
-                    ),
-                    // Add your search functionality here
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget upperRow() {
     return AnimatedOpacity(
       opacity: opacity,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 40),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'Home.dart'; // Pastikan file Home.dart ada di direktori yang benar
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'Home.dart'; // Ensure Home.dart is in the correct directory
 
 void main() {
   runApp(MyApp());
@@ -13,12 +16,41 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ServiceHomePage(), // Mengatur halaman awal
+      home: ServiceHomePage(), // Set the initial page
     );
   }
 }
 
-class ServiceHomePage extends StatelessWidget {
+class ServiceHomePage extends StatefulWidget {
+  @override
+  _ServiceHomePageState createState() => _ServiceHomePageState();
+}
+
+class _ServiceHomePageState extends State<ServiceHomePage> {
+  List assistants = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAssistants();
+  }
+
+  fetchAssistants() async {
+    final response = await http.get(Uri.parse(
+        'http://127.0.0.1:8000/api/household-assistants-category?speciality=cleaning'));
+    if (response.statusCode == 200) {
+      print(response.body); // Log the response
+      setState(() {
+        assistants = json.decode(response.body);
+        isLoading = false;
+      });
+    } else {
+      print('Failed to load household assistants'); // Log the error
+      throw Exception('Failed to load household assistants');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +60,8 @@ class ServiceHomePage extends StatelessWidget {
           onTap: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => Home()), // Mengganti halaman dengan Home
+              MaterialPageRoute(
+                  builder: (context) => Home()), // Replace page with Home
             );
           },
           child: Row(
@@ -50,51 +83,53 @@ class ServiceHomePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.grid_view),
             onPressed: () {
-              // Aksi untuk mengubah tampilan menjadi grid view
+              // Action to change view to grid view
             },
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // Search bar
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search Category',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                ),
-              ),
-            ),
-            // Daftar layanan perbaikan AC
-            Expanded(
-              child: ListView(
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
                 children: [
-                  ServiceCard(
-                   imageUrl: ('assets/images/art2.png'),
-                    nama: 'John Doe',
-                    harga: 'Rp. 20.000/Per jam',
-                    title: 'Cleaning',
-                    rating: 4.8,
-                    reviews: 37,
+                  // Search bar
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search Category',
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                      ),
+                    ),
                   ),
-                  
-                  // Tambahkan ServiceCard lainnya di sini
+                  // List of cleaning services
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: assistants.length,
+                      itemBuilder: (context, index) {
+                        final assistant = assistants[index];
+                        return ServiceCard(
+                          imageUrl: 'assets/images/art2.png',
+                          nama: assistant['name'],
+                          harga: 'Rp. 20.000/Per jam',
+                          title: assistant['speciality'],
+                          rating: 4.8,
+                          reviews: 37,
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -150,15 +185,13 @@ class ServiceCard extends StatelessWidget {
                       fontSize: 11,
                     ),
                   ),
-
-                   Text(
+                  Text(
                     harga,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 13,
                     ),
                   ),
-                  
                   SizedBox(height: 5),
                   Row(
                     children: [
@@ -175,7 +208,6 @@ class ServiceCard extends StatelessWidget {
                       fontSize: 12,
                     ),
                   ),
-                   
                 ],
               ),
             ),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'Home.dart'; // Pastikan file Home.dart ada di direktori yang benar
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'Home.dart'; // Pastikan Home.dart berada di direktori yang benar
 
 void main() {
   runApp(MyApp());
@@ -23,12 +26,14 @@ class office extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cleaning'),
+        title: Text('Office Cleaning'),
         leading: GestureDetector(
           onTap: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => Home()), // Mengganti halaman dengan Home
+              MaterialPageRoute(
+                  builder: (context) =>
+                      Home()), // Mengganti halaman dengan Home
             );
           },
           child: Row(
@@ -77,18 +82,33 @@ class office extends StatelessWidget {
             ),
             // Daftar layanan perbaikan AC
             Expanded(
-              child: ListView(
-                children: [
-                  ServiceCard(
-                    imageUrl: 'https://via.placeholder.com/150',
-                    nama: 'John Doe',
-                    title: 'Cleaning',
-                    rating: 4.8,
-                    reviews: 37,
-                  ),
-                  
-                  // Tambahkan ServiceCard lainnya di sini
-                ],
+              child: FutureBuilder(
+                future: fetchAssistants(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else {
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Failed to load assistants'));
+                    } else {
+                      List assistants = snapshot.data ?? [];
+                      return ListView.builder(
+                        itemCount: assistants.length,
+                        itemBuilder: (context, index) {
+                          final assistant = assistants[index];
+                          return ServiceCard(
+                            imageUrl: 'assets/images/art2.png',
+                            nama: assistant['name'],
+                            harga: 'Rp. 20.000/Per jam',
+                            title: assistant['speciality'],
+                            rating: 4.8,
+                            reviews: 37,
+                          );
+                        },
+                      );
+                    }
+                  }
+                },
               ),
             ),
           ],
@@ -96,11 +116,24 @@ class office extends StatelessWidget {
       ),
     );
   }
+
+  Future<List<dynamic>> fetchAssistants() async {
+    final response = await http.get(Uri.parse(
+        'http://127.0.0.1:8000/api/household-assistants-category?speciality=OfficeCleaning'));
+    if (response.statusCode == 200) {
+      print(response.body); // Log response
+      return json.decode(response.body);
+    } else {
+      print('Failed to load assistants'); // Log error
+      throw Exception('Failed to load assistants');
+    }
+  }
 }
 
 class ServiceCard extends StatelessWidget {
   final String imageUrl;
   final String nama;
+  final String harga;
   final String title;
   final double rating;
   final int reviews;
@@ -108,6 +141,7 @@ class ServiceCard extends StatelessWidget {
   ServiceCard({
     required this.imageUrl,
     required this.nama,
+    required this.harga,
     required this.title,
     required this.rating,
     required this.reviews,
@@ -147,6 +181,13 @@ class ServiceCard extends StatelessWidget {
                       fontSize: 11,
                     ),
                   ),
+                  Text(
+                    harga,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
                   SizedBox(height: 5),
                   Row(
                     children: [
@@ -163,7 +204,6 @@ class ServiceCard extends StatelessWidget {
                       fontSize: 12,
                     ),
                   ),
-                   
                 ],
               ),
             ),
