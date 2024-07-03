@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TextWidget extends StatelessWidget {
+// ignore: must_be_immutable
+class TextWidget extends StatefulWidget {
   final String text;
   final double letterSpace;
   double size = 5.0;
@@ -11,14 +12,19 @@ class TextWidget extends StatelessWidget {
       {super.key, this.letterSpace = 3});
 
   @override
+  State<TextWidget> createState() => _TextWidgetState();
+}
+
+class _TextWidgetState extends State<TextWidget> {
+  @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      widget.text,
       style: TextStyle(
-          color: color,
-          fontSize: size,
-          fontWeight: fontWeight,
-          letterSpacing: letterSpace),
+          color: widget.color,
+          fontSize: widget.size,
+          fontWeight: widget.fontWeight,
+          letterSpacing: widget.letterSpace),
     );
   }
 }

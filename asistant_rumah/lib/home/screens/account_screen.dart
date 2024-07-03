@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:asistant_rumah/home/screens/edit_screen.dart';
 import 'package:asistant_rumah/home/widgets/forward_button.dart';
 import 'package:asistant_rumah/home/widgets/setting_item.dart';
@@ -79,7 +81,7 @@ class _AccountScreenState extends State<AccountScreen> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Home()),
+              MaterialPageRoute(builder: (context) => const Home()),
             );
           },
           icon: const Icon(Ionicons.chevron_back_outline),

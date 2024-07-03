@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.green, Colors.white], // Warna hijau dan putih
+            colors: [Colors.white, Colors.white],
           ),
         ),
         child: Padding(
@@ -153,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   );
                 },
                 child: Text(
-                  'Don\'t have an account? Sign up here',
+                  'tidak memiliki akun? Daftar disini',
                   style: TextStyle(
                     color: Colors.blue,
                     fontWeight: FontWeight.bold,

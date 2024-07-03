@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'Home.dart'; // Pastikan file Home.dart ada di direktori yang benar
-import 'package:asistant_rumah/home/res/lists.dart';
 
 void main() {
   runApp(MyApp());
