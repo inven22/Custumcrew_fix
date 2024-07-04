@@ -15,6 +15,7 @@ import 'package:asistant_rumah/Services/auth_services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:asistant_rumah/home/screens/HouseHold.dart'; // Adjust the import path as per your project structure
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -28,6 +29,7 @@ class _HomeState extends State<Home> {
   bool position = false;
   String _userName = 'Loading...';
   String _token = '';
+  List<HouseholdAssistant> assistants = [];
 
   @override
   void initState() {
@@ -36,6 +38,7 @@ class _HomeState extends State<Home> {
       animator();
       fetchProfile();
       loadToken();
+      fetchAssistants();
     });
   }
 
@@ -83,6 +86,40 @@ class _HomeState extends State<Home> {
       setState(() {
         _userName = 'Error';
       });
+    }
+  }
+
+  Future<void> fetchAssistants() async {
+    try {
+      // Replace with your API endpoint URL
+      var apiUrl = Uri.parse('http://127.0.0.1:8000/api/household-assistants');
+
+      // Make GET request
+      var response = await http.get(apiUrl);
+
+      // Check if request was successful
+      if (response.statusCode == 200) {
+        // Parse JSON response
+        var jsonData = jsonDecode(response.body);
+
+        // Iterate through JSON data and create HouseholdAssistant objects
+        List<HouseholdAssistant> fetchedAssistants = [];
+        for (var item in jsonData) {
+          var assistant = HouseholdAssistant.fromJson(item);
+          fetchedAssistants.add(assistant);
+        }
+
+        // Update state to trigger UI rebuild with fetched data
+        setState(() {
+          assistants = fetchedAssistants;
+        });
+      } else {
+        // Handle errors if request was not successful
+        print('Failed to fetch assistants: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle exceptions thrown during API call
+      print('Error fetching assistants: $e');
     }
   }
 
@@ -330,29 +367,21 @@ class _HomeState extends State<Home> {
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
             child: Column(
-              children: [
-                GestureDetector(
+              children: assistants.take(5).map((assistant) {
+                return GestureDetector(
                   onTap: () {
-                    // Action when the first doctor card is tapped
+                    // Action when the assistant card is tapped
                     // You can navigate to a new screen or perform any other action
                   },
-                  child: artCard("Sarah", "Pediatrician","Rp 30.000 / Perhari", AssetImage('assets/images/doctor1.jpg')),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // Action when the second doctor card is tapped
-                    // You can navigate to a new screen or perform any other action
-                  },
-                  child: artCard("Jhon dou", "Cleaning","Rp 30.000 / Perhari", AssetImage('assets/images/doctor2.jpg')),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // Action when the third doctor card is tapped
-                    // You can navigate to a new screen or perform any other action
-                  },
-                  child: artCard("Emily", "Office cleaning","Rp 20.000 / Perhari", AssetImage('assets/images/doctor3.jpg')),
-                ),
-              ],
+                  child: artCard(
+                    assistant.name,
+                    assistant.speciality,
+                    'Rp 30.000 / Perhari', // Placeholder for harga
+                    AssetImage(
+                        'assets/images/doctor1.jpg'), // Placeholder for image
+                  ),
+                );
+              }).toList(),
             ),
           ),
         ),
@@ -360,7 +389,8 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget artCard(String name, String specialist,String harga, AssetImage image) {
+  Widget artCard(
+      String name, String specialist, String harga, AssetImage image) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
