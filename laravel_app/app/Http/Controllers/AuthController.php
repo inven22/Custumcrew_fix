@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -23,7 +24,7 @@ class AuthController extends Controller
             return response()->json($validator->errors(), 400);
         }
         //create new user in users table
-        $user = User::create([
+        $user = User::create([  
             'name' => $req->name,
             'email' => $req->email,
             'password' => Hash::make($req->password)
@@ -53,12 +54,25 @@ class AuthController extends Controller
         return response()->json($response, 400);
     }
 
-    public function profile(){
-        $user = auth()->user();
-        if ($user) {
-            return response()->json(['user' => $user], 200);
+    public function validateToken(Request $request)
+    {
+        if (Auth::guard('sanctum')->check()) {
+            return response()->json(['valid' => true], 200);
         } else {
-            return response()->json(['message' => 'User not found'], 404);
+            return response()->json(['valid' => false], 401);
+        }
+    }
+
+    public function profile(Request $request){
+        $user = $request->user();
+        try {
+            if ($user) {
+                return response()->json(['user' => $user], 200);
+            } else {
+                return response()->json(['message' => 'User not found'], 404);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Server Error'], 500);
         }
     }
 }

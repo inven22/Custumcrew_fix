@@ -22,7 +22,7 @@ use App\Http\Controllers\HouseholdAssistantController;
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 
-
+Route::middleware('auth:sanctum')->post('/auth/validate-token', [AuthController::class, 'validateToken']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

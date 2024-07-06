@@ -18,10 +18,12 @@ class OrderController extends Controller
         //     'service_date' => 'required|date',
         // ]);
 
-        $order = new Order;
+        $order = new Order();
         $order->user_id = $request->user_id;
         $order->household_assistant_id = $request->household_assistant_id;
         $order->service_date = $request->service_date;
+        $order->created_at = new \DateTime();
+        $order->updated_at = new \DateTime();
 
         if ($order->save()) {
             return response()->json(['message' => 'Order berhasil dibuat'], 200);

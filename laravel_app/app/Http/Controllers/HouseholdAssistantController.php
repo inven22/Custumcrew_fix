@@ -17,6 +17,7 @@ class HouseholdAssistantController extends Controller
         $assistants = HouseholdAssistant::where('speciality', $speciality)->get();
         return response()->json($assistants);
     }
+    
     public function show($id)
     {
         $assistant = HouseholdAssistant::find($id);
