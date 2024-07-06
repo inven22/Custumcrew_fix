@@ -1,21 +1,21 @@
 import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:asistant_rumah/home/screens/pesan.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:asistant_rumah/home/screens/account_screen.dart';
-import 'More_art.dart';
-import 'Notification.dart';
-import 'riwayat.dart';
-import 'cleaning.dart';
-import 'babyC.dart';
-import 'OfficeC.dart';
-import 'all_categori.dart';
-import 'package:asistant_rumah/Services/auth_services.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:asistant_rumah/home/screens/HouseHold.dart'; // Adjust the import path as per your project structure
+import 'package:asistant_rumah/home/screens/list_household/baby_category.dart';
+import 'package:asistant_rumah/home/screens/profile/profile.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:asistant_rumah/home/screens/chat/pesan.dart';
+import 'package:asistant_rumah/services/profile_services.dart';
+import 'package:asistant_rumah/home/screens/order/riwayat.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+
+import 'package:asistant_rumah/home/screens/list_household/office_category.dart';
+import 'package:asistant_rumah/home/screens/profile/account_screen.dart';
+import 'package:asistant_rumah/home/screens/list_household/more_art.dart';
+import 'package:asistant_rumah/home/screens/list_household/cleaning_category.dart';
+import 'package:asistant_rumah/home/model/household_assistant.dart';
+import 'package:asistant_rumah/home/screens/notifications/notifications.dart';
+import 'package:asistant_rumah/home/screens/list_household/all_categori.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -28,7 +28,6 @@ class _HomeState extends State<Home> {
   var opacity = 0.0;
   bool position = false;
   String _userName = 'Loading...';
-  String _token = '';
   List<HouseholdAssistant> assistants = [];
 
   @override
@@ -37,7 +36,6 @@ class _HomeState extends State<Home> {
     Future.delayed(Duration.zero, () {
       animator();
       fetchProfile();
-      loadToken();
       fetchAssistants();
     });
   }
@@ -49,76 +47,42 @@ class _HomeState extends State<Home> {
     });
   }
 
-  loadToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _token = prefs.getString('token') ?? '';
-      print('Token: $_token'); // Print token for debugging
-    });
-  }
-
   fetchProfile() async {
     try {
-      http.Response response = await AuthServices.getProfile();
-      print('Response: ${response}');
-      print('Response Status Code: ${response.statusCode}');
-      print(
-          'Profile Response: ${response.body}'); // Cetak respons untuk debugging
-      if (response.statusCode == 200) {
-        Map responseMap = jsonDecode(response.body);
-        if (responseMap['user'] != null &&
-            responseMap['user']['name'] != null) {
-          setState(() {
-            _userName = responseMap['user']['name'];
-          });
-        } else {
-          setState(() {
-            _userName = 'User data not available';
-          });
-        }
-      } else {
-        setState(() {
-          _userName = 'Error: ${response.statusCode}';
-        });
-      }
+      Map<String, dynamic> profileData =
+          await ProfileServices.fetchProfileData();
+      setState(() {
+        _userName = profileData['user']['name'];
+      });
     } catch (e) {
-      print(e.toString());
       setState(() {
         _userName = 'Error';
       });
+      // ignore: avoid_print
+      print('Error fetching profile: $e');
     }
   }
 
   Future<void> fetchAssistants() async {
     try {
-      // Replace with your API endpoint URL
       var apiUrl = Uri.parse('http://127.0.0.1:8000/api/household-assistants');
-
-      // Make GET request
       var response = await http.get(apiUrl);
-
-      // Check if request was successful
       if (response.statusCode == 200) {
-        // Parse JSON response
         var jsonData = jsonDecode(response.body);
-
-        // Iterate through JSON data and create HouseholdAssistant objects
         List<HouseholdAssistant> fetchedAssistants = [];
         for (var item in jsonData) {
           var assistant = HouseholdAssistant.fromJson(item);
           fetchedAssistants.add(assistant);
         }
-
-        // Update state to trigger UI rebuild with fetched data
         setState(() {
           assistants = fetchedAssistants;
         });
       } else {
-        // Handle errors if request was not successful
+        // ignore: avoid_print
         print('Failed to fetch assistants: ${response.statusCode}');
       }
     } catch (e) {
-      // Handle exceptions thrown during API call
+      // ignore: avoid_print
       print('Error fetching assistants: $e');
     }
   }
@@ -158,7 +122,7 @@ class _HomeState extends State<Home> {
                           ),
                           Text(
                             _userName,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 25,
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -167,7 +131,7 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                       IconButton(
-                        icon: Icon(Icons.phonelink_ring),
+                        icon: const Icon(Icons.phonelink_ring),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -222,7 +186,7 @@ class _HomeState extends State<Home> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: Container(
+                    child: SizedBox(
                       height: 150,
                       width: MediaQuery.of(context).size.width,
                       child: Stack(
@@ -248,42 +212,41 @@ class _HomeState extends State<Home> {
                 child: AnimatedOpacity(
                   duration: const Duration(milliseconds: 30),
                   opacity: opacity,
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Rekomendasi",
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Rekomendasi",
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Colors.black.withOpacity(.8),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          animator();
+                          await Future.delayed(
+                              const Duration(milliseconds: 50));
+                          // ignore: use_build_context_synchronously
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MoreArt(),
+                            ),
+                          );
+                          animator();
+                        },
+                        child: Text(
+                          "Lihat semua art",
                           style: TextStyle(
-                            fontSize: 25,
-                            color: Colors.black.withOpacity(.8),
+                            fontSize: 15,
+                            color: Colors.blue.shade600.withOpacity(.8),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        InkWell(
-                          onTap: () async {
-                            animator();
-                            await Future.delayed(
-                                const Duration(milliseconds: 50));
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => moreart(),
-                              ),
-                            );
-                            animator();
-                          },
-                          child: Text(
-                            "Lihat semua art",
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.blue.shade600.withOpacity(.8),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -298,7 +261,7 @@ class _HomeState extends State<Home> {
                     items: [
                       GestureDetector(
                         onTap: () {},
-                        child: Icon(Icons.home_filled,
+                        child: const Icon(Icons.home_filled,
                             color: Colors.blue, size: 30),
                       ),
                       GestureDetector(
@@ -306,10 +269,11 @@ class _HomeState extends State<Home> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => RiwayatPesananPage()),
+                                builder: (context) =>
+                                    const RiwayatPesananPage()),
                           );
                         },
-                        child: Icon(Icons.calendar_month_rounded,
+                        child: const Icon(Icons.calendar_month_rounded,
                             color: Colors.black, size: 30),
                       ),
                       GestureDetector(
@@ -318,7 +282,7 @@ class _HomeState extends State<Home> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => pesan(),
+                                builder: (context) => const Pesan(),
                               ),
                             );
                           });
@@ -326,7 +290,7 @@ class _HomeState extends State<Home> {
                         child: AnimatedOpacity(
                           duration: const Duration(milliseconds: 40),
                           opacity: opacity,
-                          child: Icon(Icons.message,
+                          child: const Icon(Icons.message,
                               color: Colors.black, size: 30),
                         ),
                       ),
@@ -335,11 +299,11 @@ class _HomeState extends State<Home> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => AccountScreen(),
+                              builder: (context) => const AccountScreen(),
                             ),
                           );
                         },
-                        child: Icon(Icons.account_circle_outlined,
+                        child: const Icon(Icons.account_circle_outlined,
                             color: Colors.black, size: 30),
                       ),
                     ],
@@ -368,18 +332,13 @@ class _HomeState extends State<Home> {
           child: SingleChildScrollView(
             child: Column(
               children: assistants.take(5).map((assistant) {
-                return GestureDetector(
-                  onTap: () {
-                    // Action when the assistant card is tapped
-                    // You can navigate to a new screen or perform any other action
-                  },
-                  child: artCard(
-                    assistant.name,
-                    assistant.speciality,
-                    'Rp 30.000 / Perhari', // Placeholder for harga
-                    AssetImage(
-                        'assets/images/doctor1.jpg'), // Placeholder for image
-                  ),
+                return artCard(
+                  assistant.name,
+                  assistant.speciality,
+                  'Rp 30.000 / Perhari', // Placeholder for harga
+                  const AssetImage(
+                      'assets/images/doctor1.jpg'), // Placeholder for image
+                  assistant,
                 );
               }).toList(),
             ),
@@ -389,83 +348,102 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget artCard(
-      String name, String specialist, String harga, AssetImage image) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: SizedBox(
-        height: 120,
-        width: double.infinity,
-        child: Row(
-          children: [
-            const SizedBox(
-              width: 10,
+  Widget artCard(String name, String specialist, String harga, AssetImage image,
+      HouseholdAssistant assistant) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Profile(
+              image: image,
+              name: assistant.name,
+              speciality: assistant.speciality,
+              order: assistant.order,
+              email: assistant.email,
+              biography: assistant.biography,
+              id: assistant.id,
             ),
-            CircleAvatar(
-              radius: 30,
-              backgroundImage: image,
-              backgroundColor: Colors.blue,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  name,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  specialist,
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  harga,
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    5,
-                    (index) => Icon(
-                      Icons.star,
-                      color: Colors.orangeAccent,
+            settings: RouteSettings(arguments: assistant.id),
+          ),
+        );
+      },
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: SizedBox(
+          height: 120,
+          width: double.infinity,
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              CircleAvatar(
+                radius: 30,
+                backgroundImage: image,
+                backgroundColor: Colors.blue,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            Icon(
-              Icons.navigation_sharp,
-              color: Colors.blue,
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-          ],
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    specialist,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    harga,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      5,
+                      (index) => const Icon(
+                        Icons.star,
+                        color: Colors.orangeAccent,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              const Icon(
+                Icons.navigation_sharp,
+                color: Colors.blue,
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -494,7 +472,7 @@ class _HomeState extends State<Home> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          ServiceHomePage(), // Ganti dengan halaman yang sesuai
+                          const CleaningCategory(), // Ganti dengan halaman yang sesuai
                     ),
                   );
                 },
@@ -508,7 +486,7 @@ class _HomeState extends State<Home> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          babystrrers(), // Ganti dengan halaman yang sesuai
+                          const BabyCategory(), // Ganti dengan halaman yang sesuai
                     ),
                   );
                 },
@@ -522,7 +500,7 @@ class _HomeState extends State<Home> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          office(), // Ganti dengan halaman yang sesuai
+                          const OfficeCategory(), // Ganti dengan halaman yang sesuai
                     ),
                   );
                 },
@@ -536,7 +514,7 @@ class _HomeState extends State<Home> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          kategoriPage(), // Ganti dengan halaman yang sesuai
+                          const AllCategory(), // Ganti dengan halaman yang sesuai
                     ),
                   );
                 },
@@ -574,12 +552,12 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 5,
         ),
         Text(
           txt,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             color: Colors.black,
             fontWeight: FontWeight.bold,

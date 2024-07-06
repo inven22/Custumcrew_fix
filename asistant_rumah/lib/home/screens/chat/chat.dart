@@ -2,9 +2,9 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:asistant_rumah/home/screens/pesan.dart';
+import 'package:asistant_rumah/home/screens/chat/pesan.dart';
 import 'package:asistant_rumah/home/widgets/text_widget.dart';
-import 'Profile.dart';
+import '../profile/profile.dart';
 
 class Chat extends StatefulWidget {
   final AssetImage image;
@@ -89,7 +89,8 @@ class _ChatState extends State<Chat> {
                                         Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => pesan(),
+                                              builder: (context) =>
+                                                  const Pesan(),
                                             ));
                                       });
                                     },

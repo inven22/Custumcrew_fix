@@ -1,14 +1,14 @@
+// ignore_for_file: file_names
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:asistant_rumah/Services/auth_services.dart';
+import 'package:asistant_rumah/services/profile_services.dart';
 
 class Oppointment extends StatefulWidget {
   final int id;
 
-  Oppointment({Key? key, required this.id}) : super(key: key);
+  const Oppointment({Key? key, required this.id}) : super(key: key);
 
   @override
   State<Oppointment> createState() => _OppointmentState();
@@ -16,13 +16,12 @@ class Oppointment extends StatefulWidget {
 
 class _OppointmentState extends State<Oppointment> {
   TextEditingController serviceDateController = TextEditingController();
+  // ignore: non_constant_identifier_names
   int user_id = 0;
-  String _token = '';
   @override
   void initState() {
     super.initState();
     fetchProfile();
-    loadToken();
   }
 
   Future<void> createOrder() async {
@@ -39,14 +38,14 @@ class _OppointmentState extends State<Oppointment> {
     );
 
     if (response.statusCode == 200) {
-      // Jika request berhasil
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Order berhasil dibuat ${response.statusCode}'),
         ),
       );
     } else {
-      // Jika request gagal
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Gagal membuat order ${response.statusCode}'),
@@ -55,41 +54,19 @@ class _OppointmentState extends State<Oppointment> {
     }
   }
 
-  loadToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _token = prefs.getString('token') ?? '';
-      print('Token: $_token'); // Print token for debugging
-    });
-  }
-
   fetchProfile() async {
     try {
-      http.Response response = await AuthServices.getProfile();
-      print('Response Status Code: ${response.statusCode}');
-      print('Profile Response: ${response.body}');
-
-      if (response.statusCode == 200) {
-        Map<String, dynamic> responseMap = jsonDecode(response.body);
-        if (responseMap['user'] != null && responseMap['user']['id'] != null) {
-          setState(() {
-            user_id = responseMap['user']['id']; // Assuming user_id is a String
-          });
-        } else {
-          setState(() {
-            user_id = 0;
-          });
-        }
-      } else {
-        setState(() {
-          user_id = 0;
-        });
-      }
+      Map<String, dynamic> profileData =
+          await ProfileServices.fetchProfileData();
+      setState(() {
+        user_id = profileData['user']['id'];
+      });
     } catch (e) {
-      print('Error: $e');
       setState(() {
         user_id = 0;
       });
+      // ignore: avoid_print
+      print('Error fetching profile: $e');
     }
   }
 
@@ -97,26 +74,27 @@ class _OppointmentState extends State<Oppointment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Buat Pesanan'),
+        title: const Text('Buat Pesanan'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Text(
-              'ID: ${widget.id} user_id: ${user_id}',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              'ID: ${widget.id} user_id: $user_id',
+              style:
+                  const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: serviceDateController,
-              decoration: InputDecoration(labelText: 'Tanggal Layanan'),
+              decoration: const InputDecoration(labelText: 'Tanggal Layanan'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: createOrder,
-              child: Text('Buat Pesanan'),
+              child: const Text('Buat Pesanan'),
             ),
           ],
         ),

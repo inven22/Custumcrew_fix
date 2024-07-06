@@ -2,41 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'Home.dart'; // Pastikan Home.dart berada di direktori yang benar
+import '../dashboard/home.dart'; // Pastikan Home.dart berada di direktori yang benar
 
-void main() {
-  runApp(MyApp());
-}
+class OfficeCategory extends StatelessWidget {
+  const OfficeCategory({super.key});
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Service App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: office(), // Mengatur halaman awal
-    );
-  }
-}
-
-class office extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Office Cleaning'),
+        title: const Text('Office Cleaning'),
         leading: GestureDetector(
           onTap: () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      Home()), // Mengganti halaman dengan Home
+                      const Home()), // Mengganti halaman dengan Home
             );
           },
-          child: Row(
+          child: const Row(
             children: [
               Icon(Icons.arrow_back),
               SizedBox(width: 5),
@@ -53,7 +38,7 @@ class office extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.grid_view),
+            icon: const Icon(Icons.grid_view),
             onPressed: () {
               // Aksi untuk mengubah tampilan menjadi grid view
             },
@@ -70,7 +55,7 @@ class office extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(
                   hintText: 'Search Category',
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
@@ -86,10 +71,11 @@ class office extends StatelessWidget {
                 future: fetchAssistants(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else {
                     if (snapshot.hasError) {
-                      return Center(child: Text('Failed to load assistants'));
+                      return const Center(
+                          child: Text('Failed to load assistants'));
                     } else {
                       List assistants = snapshot.data ?? [];
                       return ListView.builder(
@@ -121,9 +107,11 @@ class office extends StatelessWidget {
     final response = await http.get(Uri.parse(
         'http://127.0.0.1:8000/api/household-assistants-category?speciality=OfficeCleaning'));
     if (response.statusCode == 200) {
+      // ignore: avoid_print
       print(response.body); // Log response
       return json.decode(response.body);
     } else {
+      // ignore: avoid_print
       print('Failed to load assistants'); // Log error
       throw Exception('Failed to load assistants');
     }
@@ -138,7 +126,8 @@ class ServiceCard extends StatelessWidget {
   final double rating;
   final int reviews;
 
-  ServiceCard({
+  const ServiceCard({
+    super.key,
     required this.imageUrl,
     required this.nama,
     required this.harga,
@@ -150,7 +139,7 @@ class ServiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Row(
@@ -162,41 +151,41 @@ class ServiceCard extends StatelessWidget {
               height: 80,
               fit: BoxFit.cover,
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     nama,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
                   ),
                   Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 11,
                     ),
                   ),
                   Text(
                     harga,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 13,
                     ),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Row(
                     children: [
-                      Icon(Icons.star, color: Colors.amber, size: 16),
-                      SizedBox(width: 4),
+                      const Icon(Icons.star, color: Colors.amber, size: 16),
+                      const SizedBox(width: 4),
                       Text('$rating ($reviews)'),
                     ],
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Text(
                     'Starts From',
                     style: TextStyle(
@@ -207,7 +196,7 @@ class ServiceCard extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(Icons.more_vert),
+            const Icon(Icons.more_vert),
           ],
         ),
       ),

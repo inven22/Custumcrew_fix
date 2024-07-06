@@ -1,17 +1,15 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:asistant_rumah/Services/auth_services.dart';
-import 'package:asistant_rumah/Services/globals.dart';
-import 'home_screen.dart';
 import 'login_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:asistant_rumah/services/auth_services.dart';
+import 'package:asistant_rumah/services/globals.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _RegisterScreenState createState() => _RegisterScreenState();
 }
 
@@ -28,12 +26,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           await AuthServices.register(_name, _email, _password);
       Map responseMap = jsonDecode(response.body);
       if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
         Navigator.push(
             context,
             MaterialPageRoute(
               builder: (BuildContext context) => const LoginScreen(),
             ));
       } else {
+        // ignore: use_build_context_synchronously
         errorSnackBar(context, responseMap.values.first[0]);
       }
     } else {
@@ -41,14 +41,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error'),
-            content: Text('Please fill out all fields'),
+            title: const Text('Error'),
+            content: const Text('Please fill out all fields'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -73,7 +73,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -88,9 +88,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Nama',
                       prefixIcon: Icon(Icons.person),
                     ),
@@ -104,9 +104,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Email',
                       prefixIcon: Icon(Icons.email),
                     ),
@@ -125,10 +125,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Password',
                       prefixIcon: Icon(Icons.lock),
                     ),
@@ -145,10 +145,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: createAccountPressed,
-                    child: Padding(
+                    // ignore: sort_child_properties_last
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 15),
                       child: Text(
                         'Create Account',
@@ -159,14 +160,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
+                      // ignore: deprecated_member_use
                       primary: Colors.blue,
+                      // ignore: deprecated_member_use
                       onPrimary: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -177,7 +180,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       'Sudah memiliki akun? Masuk disini',
                       style: TextStyle(
                         decoration: TextDecoration.underline,

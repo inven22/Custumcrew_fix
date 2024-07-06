@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:asistant_rumah/home/widgets/text_widget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:asistant_rumah/home/screens/NotificationModel.dart';
+import 'package:asistant_rumah/home/model/notifications.dart';
 
 class NotificationPage extends StatefulWidget {
   @override

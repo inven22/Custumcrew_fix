@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:asistant_rumah/Services/auth_services.dart';
+import 'package:asistant_rumah/services/auth_services.dart';
 import 'package:http/http.dart' as http;
-import 'package:asistant_rumah/Screens/register_screen.dart'; // Tambahkan import untuk RegisterScreen
-import 'home_screen.dart';
+import 'package:asistant_rumah/home/screens/authentication/register_screen.dart';
+import 'package:asistant_rumah/home/screens/dashboard/home.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginScreenState createState() => _LoginScreenState();
 }
 
@@ -26,18 +27,20 @@ class _LoginScreenState extends State<LoginScreen> {
       http.Response response = await AuthServices.login(_email, _password);
       Map responseMap = jsonDecode(response.body);
       if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => const HomeScreen(),
+            builder: (BuildContext context) => const Home(),
           ),
         );
       } else {
+        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Error'),
+              title: const Text('Error'),
               content: Text(responseMap['error'] ?? 'Password salah'),
               actions: [
                 TextButton(
@@ -47,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       _isLoggingIn = false;
                     });
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );
@@ -62,14 +65,14 @@ class _LoginScreenState extends State<LoginScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error'),
-            content: Text('Please enter all required fields'),
+            title: const Text('Error'),
+            content: const Text('Please enter all required fields'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -96,8 +99,9 @@ class _LoginScreenState extends State<LoginScreen> {
         centerTitle: true,
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
+        decoration: const BoxDecoration(
+          // ignore: unnecessary_const
+          gradient: const LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [Colors.white, Colors.white],
@@ -108,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              const Icon(
                 Icons.person,
                 size: 100,
                 color: Colors.black, // Warna ikon
@@ -120,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   border: OutlineInputBorder(
                     borderRadius:
                         BorderRadius.circular(20), // Lengkungan di setiap sisi
-                    borderSide: BorderSide(color: Colors.black),
+                    borderSide: const BorderSide(color: Colors.black),
                   ),
                 ),
                 onChanged: (value) {
@@ -135,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   border: OutlineInputBorder(
                     borderRadius:
                         BorderRadius.circular(20), // Lengkungan di setiap sisi
-                    borderSide: BorderSide(color: Colors.black),
+                    borderSide: const BorderSide(color: Colors.black),
                   ),
                 ),
                 onChanged: (value) {
@@ -149,10 +153,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     context,
                     MaterialPageRoute(
                         builder: (BuildContext context) =>
-                            RegisterScreen()), // Pindah ke halaman pendaftaran
+                            const RegisterScreen()), // Pindah ke halaman pendaftaran
                   );
                 },
-                child: Text(
+                child: const Text(
                   'tidak memiliki akun? Daftar disini',
                   style: TextStyle(
                     color: Colors.blue,
@@ -163,23 +167,28 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: _isLoggingIn ? null : loginPressed,
+                // ignore: sort_child_properties_last
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   child: _isLoggingIn
-                      ? CircularProgressIndicator(
+                      ? const CircularProgressIndicator(
                           valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
+                              // ignore: unnecessary_const
+                              const AlwaysStoppedAnimation<Color>(Colors.white),
                         )
-                      : Text(
+                      : const Text(
                           'Log In',
-                          style: TextStyle(
+                          // ignore: unnecessary_const
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                 ),
                 style: ElevatedButton.styleFrom(
+                  // ignore: deprecated_member_use
                   primary: Colors.blue, // Warna tombol biru
+                  // ignore: deprecated_member_use
                   onPrimary: Colors.white, // Warna teks putih
                   shape: RoundedRectangleBorder(
                     borderRadius:

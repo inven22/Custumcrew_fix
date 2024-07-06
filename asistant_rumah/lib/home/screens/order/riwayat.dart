@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: RiwayatPesananPage(),
+    home: const RiwayatPesananPage(),
     theme: ThemeData(
       primarySwatch: Colors.blue,
     ),
@@ -13,7 +13,10 @@ void main() {
 }
 
 class RiwayatPesananPage extends StatefulWidget {
+  const RiwayatPesananPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _RiwayatPesananPageState createState() => _RiwayatPesananPageState();
 }
 
@@ -58,23 +61,6 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
     await prefs.setString('historyOrders', json.encode(historyOrders));
   }
 
-  // void _moveOrderToHistory(int orderId) {
-  //   setState(() {
-  //     // Find the order in upcomingOrders
-  //     final orderIndex = upcomingOrders.indexWhere(
-  //         (order) => order['household_assistant_id'] == orderId);
-  //     if (orderIndex != -1) {
-  //       final order = upcomingOrders.removeAt(orderIndex);
-  //       // Add the order to historyOrders
-  //       historyOrders.add(order);
-  //       // Save historyOrders after moving
-  //       saveHistoryOrders();
-  //       // Update UI
-  //       setState(() {});
-  //     }
-  //   });
-  // }
-
   void _moveOrderToHistory(int orderId) {
     setState(() {
       // Find the order in upcomingOrders
@@ -100,12 +86,12 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-              title: Text("Beri Penilaian"),
+              title: const Text("Beri Penilaian"),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("Silakan berikan penilaian Anda:"),
-                  SizedBox(height: 20),
+                  const Text("Silakan berikan penilaian Anda:"),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(5, (index) {
@@ -126,17 +112,20 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
               ),
               actions: <Widget>[
                 TextButton(
-                  child: Text("Batal"),
+                  child: const Text("Batal"),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
+                    // ignore: deprecated_member_use
                     primary: Theme.of(context).primaryColor,
+                    // ignore: deprecated_member_use
                     onPrimary: Colors.white,
                   ),
                   onPressed: () {
+                    // ignore: avoid_print
                     print('Rating diberikan: $rating');
                     setState(() {
                       ratedOrders[orderId] =
@@ -146,7 +135,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                     _moveOrderToHistory(orderId);
                     Navigator.of(context).pop();
                   },
-                  child: Text("Simpan"),
+                  child: const Text("Simpan"),
                 ),
               ],
             );
@@ -160,10 +149,10 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Riwayat Pesanan'),
+        title: const Text('Riwayat Pesanan'),
         bottom: TabBar(
           controller: _tabController,
-          tabs: [
+          tabs: const [
             Tab(text: 'Upcoming'),
             Tab(text: 'History'),
           ],
@@ -185,16 +174,16 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                           size: 100,
                           color: Theme.of(context).primaryColor,
                         ),
-                        SizedBox(height: 20),
-                        Text(
+                        const SizedBox(height: 20),
+                        const Text(
                           'No Upcoming Order',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 10),
-                        Text(
+                        const SizedBox(height: 10),
+                        const Text(
                           'Currently you don’t have any upcoming order.\nPlace and track your orders from here.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -202,16 +191,18 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                             color: Colors.grey,
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: () {
                             // Navigate to services page
                           },
                           style: ElevatedButton.styleFrom(
+                            // ignore: deprecated_member_use
                             primary: Theme.of(context).primaryColor,
+                            // ignore: deprecated_member_use
                             onPrimary: Colors.white,
                           ),
-                          child: Text('View all services'),
+                          child: const Text('View all services'),
                         ),
                       ],
                     ),
@@ -242,7 +233,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                                     orderId.toString(),
                                   ),
                                 ),
-                                SizedBox(width: 12),
+                                const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
@@ -250,20 +241,20 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                                     children: [
                                       Text(
                                         'ID: $orderId',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      SizedBox(height: 4),
+                                      const SizedBox(height: 4),
                                       Text(
                                         'Service Date: ${order['service_date']}',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           color: Colors.grey,
                                         ),
                                       ),
-                                      SizedBox(height: 8),
+                                      const SizedBox(height: 8),
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: Row(
@@ -274,8 +265,10 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                                                 _showRatingDialog(orderId);
                                               },
                                               style: ElevatedButton.styleFrom(
+                                                // ignore: deprecated_member_use
                                                 primary: Theme.of(context)
                                                     .primaryColor,
+                                                // ignore: deprecated_member_use
                                                 onPrimary: Colors.white,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
@@ -286,25 +279,27 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                                                 ratedOrders.containsKey(orderId)
                                                     ? 'Edit Rating'
                                                     : 'Beri Penilaian',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(width: 8),
+                                            const SizedBox(width: 8),
                                             ElevatedButton(
                                               onPressed: () {
                                                 _moveOrderToHistory(orderId);
                                               },
                                               style: ElevatedButton.styleFrom(
+                                                // ignore: deprecated_member_use
                                                 primary: Colors.grey,
+                                                // ignore: deprecated_member_use
                                                 onPrimary: Colors.white,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(20),
                                                 ),
                                               ),
-                                              child: Text(
+                                              child: const Text(
                                                 'Tandai selesai',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
@@ -328,7 +323,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
 
           // Tab History
           historyOrders.isEmpty
-              ? Center(child: Text("No History Orders"))
+              ? const Center(child: Text("No History Orders"))
               : ListView.builder(
                   itemCount: historyOrders.length,
                   itemBuilder: (context, index) {
@@ -354,7 +349,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                                     orderId.toString(),
                                   ),
                                 ),
-                                SizedBox(width: 12),
+                                const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
@@ -362,15 +357,15 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                                     children: [
                                       Text(
                                         'ID: $orderId',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      SizedBox(height: 4),
+                                      const SizedBox(height: 4),
                                       Text(
                                         'Service Date: ${order['service_date']}',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           color: Colors.grey,
                                         ),

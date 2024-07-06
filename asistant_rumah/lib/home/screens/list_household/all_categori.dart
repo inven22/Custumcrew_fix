@@ -1,23 +1,12 @@
 import 'package:flutter/material.dart';
-import 'Home.dart';
-import 'babyC.dart';
-import 'OfficeC.dart';
-import 'cleaning.dart';
+import '../dashboard/home.dart';
+import 'baby_category.dart';
+import 'office_category.dart';
+import 'cleaning_category.dart';
 
-void main() {
-  runApp(MyApp());
-}
+class AllCategory extends StatelessWidget {
+  const AllCategory({super.key});
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: kategoriPage(),
-    );
-  }
-}
-
-class kategoriPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,12 +14,13 @@ class kategoriPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Home(), // Ganti dengan halaman yang sesuai
+                builder: (context) =>
+                    const Home(), // Ganti dengan halaman yang sesuai
               ),
             );
           },
@@ -38,7 +28,7 @@ class kategoriPage extends StatelessWidget {
         title: TextField(
           decoration: InputDecoration(
             hintText: 'Search Category',
-            prefixIcon: Icon(Icons.search),
+            prefixIcon: const Icon(Icons.search),
             filled: true,
             fillColor: Colors.white,
             border: OutlineInputBorder(
@@ -50,12 +40,13 @@ class kategoriPage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.search, color: Colors.white),
+            icon: const Icon(Icons.search, color: Colors.white),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Home(), // Ganti dengan halaman yang sesuai
+                  builder: (context) =>
+                      const Home(), // Ganti dengan halaman yang sesuai
                 ),
               );
             },
@@ -67,14 +58,14 @@ class kategoriPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Semua Kategori',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -85,7 +76,8 @@ class kategoriPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ServiceHomePage(), // Ganti dengan halaman yang sesuai
+                        builder: (context) =>
+                            const CleaningCategory(), // Ganti dengan halaman yang sesuai
                       ),
                     );
                   },
@@ -97,7 +89,8 @@ class kategoriPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => office(), // Ganti dengan halaman yang sesuai
+                        builder: (context) =>
+                            const OfficeCategory(), // Ganti dengan halaman yang sesuai
                       ),
                     );
                   },
@@ -109,7 +102,8 @@ class kategoriPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => babystrrers(), // Ganti dengan halaman yang sesuai
+                        builder: (context) =>
+                            const BabyCategory(), // Ganti dengan halaman yang sesuai
                       ),
                     );
                   },
@@ -128,7 +122,11 @@ class CategoryItem extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
 
-  CategoryItem({required this.imagePath, required this.label, required this.onTap});
+  const CategoryItem(
+      {super.key,
+      required this.imagePath,
+      required this.label,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -141,10 +139,10 @@ class CategoryItem extends StatelessWidget {
             backgroundColor: Colors.transparent,
             child: Image.asset(imagePath),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             label,
-            style: TextStyle(fontSize: 14),
+            style: const TextStyle(fontSize: 14),
           ),
         ],
       ),
