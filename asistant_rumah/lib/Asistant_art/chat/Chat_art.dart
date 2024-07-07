@@ -1,10 +1,9 @@
 // ignore_for_file: unused_import, file_names
-
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:asistant_rumah/home/screens/chat/pesan.dart';
+import 'pesan_list.dart';
 import 'package:asistant_rumah/home/widgets/text_widget.dart';
-import '../profile/profile.dart';
+
 
 class Chat extends StatefulWidget {
   final AssetImage image;
@@ -89,8 +88,7 @@ class _ChatState extends State<Chat> {
                                         Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) =>
-                                                   Pesan(),
+                                              builder: (context) => pesanlist(),
                                             ));
                                       });
                                     },

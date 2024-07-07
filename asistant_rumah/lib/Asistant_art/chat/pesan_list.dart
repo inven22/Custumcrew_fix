@@ -2,15 +2,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:asistant_rumah/home/screens/dashboard/home.dart';
-import 'Chat.dart';
+import 'package:asistant_rumah/Asistant_art/dashboard/home_art.dart';
+import 'Chat_art.dart';
 
-class Pesan extends StatefulWidget {
+class pesanlist extends StatefulWidget {
   @override
-  State<Pesan> createState() => _SeeAllState();
+  State<pesanlist> createState() => _SeeAllState();
 }
 
-class _SeeAllState extends State<Pesan> {
+class _SeeAllState extends State<pesanlist> {
   var opacity = 0.0;
   bool position = false;
   List<dynamic> messages = [];
@@ -59,15 +59,15 @@ class _SeeAllState extends State<Pesan> {
           children: [
             AnimatedPositioned(
               duration: Duration(milliseconds: 400),
-              top: position ? 20 : 50, // Nilai top diubah untuk menyesuaikan posisi awal
-              left: 40,
+              top: position ? 20 : 50,
+              left: 20, // Changed to fit the screen
               right: 20,
               child: upperRow(),
             ),
             AnimatedPositioned(
-              top: position ? 80 : 140, // Nilai top diubah untuk menyesuaikan posisi awal
-              right: 40,
-              left: 40,
+              top: position ? 80 : 140,
+              right: 20, // Changed to fit the screen
+              left: 20, // Changed to fit the screen
               duration: Duration(milliseconds: 400),
               child: AnimatedOpacity(
                 opacity: opacity,
@@ -91,7 +91,7 @@ class _SeeAllState extends State<Pesan> {
               ),
             ),
             AnimatedPositioned(
-              top: position ? 110 : 170, // Nilai top diubah untuk menyesuaikan posisi awal
+              top: position ? 110 : 170,
               left: 20,
               right: 20,
               duration: Duration(milliseconds: 500),
@@ -99,7 +99,7 @@ class _SeeAllState extends State<Pesan> {
                 duration: const Duration(milliseconds: 500),
                 opacity: opacity,
                 child: Container(
-                  height: 630,
+                  height: size.height - 170,
                   child: ListView.builder(
                     itemCount: messages.length,
                     itemBuilder: (context, index) => InkWell(
@@ -110,7 +110,7 @@ class _SeeAllState extends State<Pesan> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => Chat(
-                              image: AssetImage('assets/default_avatar.png'), // Ganti dengan gambar default jika diperlukan
+                              image: AssetImage('assets/default_avatar.png'),
                               name: messages[index]['household_assistant_id'].toString(),
                               specialist: messages[index]['service_date'],
                             ),
@@ -131,56 +131,60 @@ class _SeeAllState extends State<Pesan> {
                               const SizedBox(width: 20),
                               CircleAvatar(
                                 radius: 30,
-                                backgroundImage: AssetImage('assets/default_avatar.png'), // Ganti dengan gambar default jika diperlukan
+                                backgroundImage: AssetImage('assets/default_avatar.png'),
                                 backgroundColor: Colors.blue,
                               ),
                               const SizedBox(width: 10),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'ID Transaksi ${messages[index]['household_assistant_id']}',
-                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    'Tanggal pesan : ${messages[index]['service_date']}',
-                                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  const Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.orangeAccent,
-                                      ),
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.orangeAccent,
-                                      ),
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.orangeAccent,
-                                      ),
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.orangeAccent,
-                                      ),
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.orangeAccent,
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start, // Ensure texts are aligned to start
+                                  children: [
+                                    Text(
+                                      'ID Transaksi ${messages[index]['household_assistant_id']}',
+                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow.ellipsis, // Handle text overflow
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'Tanggal pesan : ${messages[index]['service_date']}',
+                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow.ellipsis, // Handle text overflow
+                                    ),
+                                    const SizedBox(height: 5),
+                                    const Row(
+                                      mainAxisAlignment: MainAxisAlignment.start, // Align stars to start
+                                      children: [
+                                        Icon(
+                                          Icons.star,
+                                          color: Colors.orangeAccent,
+                                        ),
+                                        Icon(
+                                          Icons.star,
+                                          color: Colors.orangeAccent,
+                                        ),
+                                        Icon(
+                                          Icons.star,
+                                          color: Colors.orangeAccent,
+                                        ),
+                                        Icon(
+                                          Icons.star,
+                                          color: Colors.orangeAccent,
+                                        ),
+                                        Icon(
+                                          Icons.star,
+                                          color: Colors.orangeAccent,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                              const Spacer(),
                               const Icon(
                                 Icons.navigation_sharp,
                                 color: Colors.blue,
                               ),
-                              const SizedBox(width: 40),
+                              const SizedBox(width: 20), // Adjusted spacing
                             ],
                           ),
                         ),
@@ -210,7 +214,7 @@ class _SeeAllState extends State<Pesan> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Home(),
+                    builder: (context) => const Homeart(),
                   ),
                 );
               });

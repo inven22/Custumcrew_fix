@@ -5,17 +5,16 @@ import 'package:asistant_rumah/services/profile_services.dart';
 import 'package:asistant_rumah/home/widgets/forward_button.dart';
 import 'package:asistant_rumah/home/screens/profile/edit_screen.dart';
 import 'package:asistant_rumah/home/screens/authentication/login_screen.dart';
-import 'package:asistant_rumah/Asistant_art/daftar_art/daftarart.dart';
 
-class AccountScreen extends StatefulWidget {
-  const AccountScreen({Key? key}) : super(key: key);
+class settingart extends StatefulWidget {
+  const settingart({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
   _AccountScreenState createState() => _AccountScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _AccountScreenState extends State<settingart> {
   String _userName = 'Loading...';
   String _userEmail = '';
 
@@ -150,21 +149,6 @@ class _AccountScreenState extends State<AccountScreen> {
                 bgColor: Colors.red.shade100,
                 iconColor: Colors.red,
                 onTap: () {},
-              ),
-               const SizedBox(height: 20),
-              SettingItem(
-                title: "Daftar sebagai Hausehold",
-                icon: Ionicons.notifications,
-                bgColor: Colors.blue.shade100,
-                iconColor: Colors.blue,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const daftarart(),
-                    ),
-                  );
-                },
               ),
               const SizedBox(height: 20),
               SettingItem(
