@@ -109,7 +109,7 @@ class _AccountScreenState extends State<settingart> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const EditAccountScreen(),
+                            builder: (context) => EditAccountScreen(),
                           ),
                         );
                       },

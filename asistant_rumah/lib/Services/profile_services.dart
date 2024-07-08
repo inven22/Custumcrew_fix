@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:asistant_rumah/services/globals.dart';
 import 'package:asistant_rumah/services/token_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileServices {
   static int? _userId;
@@ -50,6 +51,40 @@ class ProfileServices {
       }
     } catch (e) {
       throw Exception('Error fetching profile: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>?> updateProfile({
+    required String name,
+    required String email,
+    required String password,
+    required String alamat,
+    required String phone,
+  }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+
+    var url = Uri.parse('http://127.0.0.1:8000/api/auth/update-profile');
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    var body = jsonEncode({
+      'name': name,
+      'email': email,
+      'password': password,
+      'alamat': alamat,
+      'phone': phone,
+    });
+
+    var response = await http.put(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      return jsonResponse;
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      return null;
     }
   }
 }

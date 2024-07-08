@@ -16,7 +16,6 @@ class RiwayatPesananPage extends StatefulWidget {
   const RiwayatPesananPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _RiwayatPesananPageState createState() => _RiwayatPesananPageState();
 }
 
@@ -115,21 +114,29 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    // ignore: deprecated_member_use
                     primary: Theme.of(context).primaryColor,
-                    // ignore: deprecated_member_use
                     onPrimary: Colors.white,
                   ),
-                  onPressed: () {
-                    // ignore: avoid_print
-                    print('Rating diberikan: $rating');
-                    setState(() {
-                      ratedOrders[orderId] =
-                          rating; // Save rating for this order
-                      ratingCount++; // Increment count on each rating
-                    });
-                    _moveOrderToHistory(orderId);
-                    Navigator.of(context).pop();
+                  onPressed: () async {
+                    final response = await http.post(
+                      Uri.parse('http://127.0.0.1:8000/api/ratings_store'),
+                      body: {
+                        'order_id': orderId.toString(),
+                        'rating': rating.toString(),
+                      },
+                    );
+
+                    if (response.statusCode == 200) {
+                      setState(() {
+                        ratedOrders[orderId] = rating;
+                        ratingCount++;
+                      });
+                      _moveOrderToHistory(orderId);
+                      Navigator.of(context).pop();
+                    } else {
+                      print('Failed to store rating: ${response.statusCode}');
+                      // Handle error message or retry logic
+                    }
                   },
                   child: const Text("Simpan"),
                 ),
@@ -193,9 +200,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                             // Navigate to services page
                           },
                           style: ElevatedButton.styleFrom(
-                            // ignore: deprecated_member_use
                             primary: Theme.of(context).primaryColor,
-                            // ignore: deprecated_member_use
                             onPrimary: Colors.white,
                           ),
                           child: const Text('View all services'),
@@ -262,10 +267,8 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                                                 _showRatingDialog(orderId);
                                               },
                                               style: ElevatedButton.styleFrom(
-                                                // ignore: deprecated_member_use
                                                 primary: Theme.of(context)
                                                     .primaryColor,
-                                                // ignore: deprecated_member_use
                                                 onPrimary: Colors.white,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
@@ -287,9 +290,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                                                 _moveOrderToHistory(orderId);
                                               },
                                               style: ElevatedButton.styleFrom(
-                                                // ignore: deprecated_member_use
                                                 primary: Colors.grey,
-                                                // ignore: deprecated_member_use
                                                 onPrimary: Colors.white,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:

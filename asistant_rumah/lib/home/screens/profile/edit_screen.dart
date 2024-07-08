@@ -1,142 +1,137 @@
-import 'package:asistant_rumah/home/widgets/edit_item.dart';
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:asistant_rumah/services/profile_services.dart';
 
 class EditAccountScreen extends StatefulWidget {
-  const EditAccountScreen({super.key});
-
   @override
-  State<EditAccountScreen> createState() => _EditAccountScreenState();
+  _EditAccountScreenState createState() => _EditAccountScreenState();
 }
 
 class _EditAccountScreenState extends State<EditAccountScreen> {
-  String gender = "man";
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController alamatController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    loadProfile();
+  }
+
+  void loadProfile() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      Map<String, dynamic> profileData =
+          await ProfileServices.fetchProfileData();
+      setState(() {
+        nameController.text = profileData['user']['name'];
+        emailController.text = profileData['user']['email'];
+        alamatController.text = profileData['user']['alamat'] ?? '';
+        phoneController.text = profileData['user']['phone'] ?? '';
+      });
+    } catch (e) {
+      print('Error fetching profile: $e');
+      // Handle error fetching profile
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void updateProfile() async {
+    String name = nameController.text;
+    String email = emailController.text;
+    String password = passwordController.text;
+    String alamat = alamatController.text;
+    String phone = phoneController.text;
+
+    try {
+      var response = await ProfileServices.updateProfile(
+        name: name,
+        email: email,
+        password: password,
+        alamat: alamat,
+        phone: phone,
+      );
+
+      if (response != null) {
+        // Handle successful update
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Profile updated successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        // Handle error
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to update profile'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      // Handle exceptions
+      print('Exception updating profile: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Ionicons.chevron_back_outline),
-        ),
-        leadingWidth: 80,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: IconButton(
-              onPressed: () {},
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.lightBlueAccent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                fixedSize: const Size(60, 50),
-                elevation: 3,
+        title: Text('Edit Profile'),
+      ),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(labelText: 'Name'),
+                  ),
+                  TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(labelText: 'Email'),
+                  ),
+                  TextField(
+                    controller: passwordController,
+                    decoration: InputDecoration(labelText: 'Password'),
+                    obscureText: true,
+                  ),
+                  TextField(
+                    controller: alamatController,
+                    decoration: InputDecoration(labelText: 'Alamat'),
+                  ),
+                  TextField(
+                    controller: phoneController,
+                    decoration: InputDecoration(labelText: 'Phone'),
+                  ),
+                  SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: updateProfile,
+                    child: Text('Update Profile'),
+                  ),
+                ],
               ),
-              icon: const Icon(Ionicons.checkmark, color: Colors.white),
             ),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Account",
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 40),
-              EditItem(
-                title: "Photo",
-                widget: Column(
-                  children: [
-                    Image.asset(
-                      "assets/images/avatar.png",
-                      height: 100,
-                      width: 100,
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.lightBlueAccent,
-                      ),
-                      child: const Text("Upload Image"),
-                    )
-                  ],
-                ),
-              ),
-              const EditItem(
-                title: "Name",
-                widget: TextField(),
-              ),
-              const SizedBox(height: 40),
-              EditItem(
-                title: "Gender",
-                widget: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          gender = "man";
-                        });
-                      },
-                      style: IconButton.styleFrom(
-                        backgroundColor: gender == "man"
-                            ? Colors.deepPurple
-                            : Colors.grey.shade200,
-                        fixedSize: const Size(50, 50),
-                      ),
-                      icon: Icon(
-                        Ionicons.male,
-                        color: gender == "man" ? Colors.white : Colors.black,
-                        size: 18,
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          gender = "woman";
-                        });
-                      },
-                      style: IconButton.styleFrom(
-                        backgroundColor: gender == "woman"
-                            ? Colors.deepPurple
-                            : Colors.grey.shade200,
-                        fixedSize: const Size(50, 50),
-                      ),
-                      icon: Icon(
-                        Ionicons.female,
-                        color: gender == "woman" ? Colors.white : Colors.black,
-                        size: 18,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(height: 40),
-              const EditItem(
-                widget: TextField(),
-                title: "Age",
-              ),
-              const SizedBox(height: 40),
-              const EditItem(
-                widget: TextField(),
-                title: "Email",
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

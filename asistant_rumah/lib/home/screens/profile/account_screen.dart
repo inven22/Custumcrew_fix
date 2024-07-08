@@ -150,7 +150,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const EditAccountScreen(),
+                            builder: (context) => EditAccountScreen(),
                           ),
                         );
                       },
@@ -204,7 +204,8 @@ class _AccountScreenState extends State<AccountScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const daftarart(),
+                            builder: (context) =>
+                                RegisterHouseholdAssistantScreen(),
                           ),
                         );
                       },
