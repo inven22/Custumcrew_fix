@@ -33,12 +33,14 @@ class _ProfileState extends State<Profile> {
   var opacity = 0.0;
   late Size size;
   double averageRating = 0.0;
+  int totalOrder = 0;
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       fetchAverageRating();
+      fetchTotalOrder();
       animator();
     });
   }
@@ -67,6 +69,21 @@ class _ProfileState extends State<Profile> {
     } else {
       print('Failed to load average rating');
     }
+  }
+
+  void fetchTotalOrder() async {
+    final response = await http.get(
+      Uri.parse('http://127.0.0.1:8000/api/getTotalOrder/${widget.id}'),
+    );
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        totalOrder = data['total_order'] ?? 0;
+      });
+    } else {
+      print('Failed to load total order');
+    }
+    print(totalOrder);
   }
 
   @override
@@ -222,8 +239,7 @@ class _ProfileState extends State<Profile> {
                                       height: 10,
                                     ),
                                     TextWidget(
-                                      widget.order?.toString() ??
-                                          "belum ada yang memesan",
+                                      totalOrder.toString(),
                                       23,
                                       Colors.black,
                                       FontWeight.bold,
