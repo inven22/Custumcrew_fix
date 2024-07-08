@@ -29,7 +29,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->get('/profile', [AuthController::class, 'profile']);
-// Route::get('/profile', [AuthController::class, 'profile']);
+
+Route::middleware('auth:sanctum')->get('/get-self-household-assistant', [HouseholdAssistantController::class, 'showById']);
 
 Route::get('/household-assistants', [HouseholdAssistantController::class, 'index']);
 Route::get('/household-assistants-category', [HouseholdAssistantController::class, 'category']);
@@ -39,7 +40,7 @@ Route::put('/household-assistants/{id}', [HouseholdAssistantController::class, '
 Route::delete('/household-assistants/{id}', [HouseholdAssistantController::class, 'destroy']);
 
 Route::post('/orders', [OrderController::class, 'create']);
-Route::get('/getRiwayat', [OrderController::class, 'getOrders']);
+Route::get('/getRiwayat', [OrderController::class, 'getOrders']);   
 
 Route::get('/getNotifications', [NotificationController::class, 'getNotif']);
 
@@ -47,3 +48,5 @@ Route::get('/ratings', [RatingController::class, 'index']);
 Route::post('/ratings_store', [RatingController::class, 'store']);
 Route::get('/ratings/{id}', [RatingController::class, 'show']);
 
+Route::get('/getRatings/{id}', [RatingController::class, 'getHouseholdRating']);
+Route::middleware('auth:sanctum')->get('/getRatings/{id}', [RatingController::class, 'getHouseholdRating']);

@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'alamat',
+        'phone'
     ];
 
     /**
@@ -41,4 +44,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function householdAssistants()
+    {
+        return $this->hasMany(HouseholdAssistant::class);
+    }
 }

@@ -11,6 +11,15 @@ class HouseholdAssistantController extends Controller
         $assistants = HouseholdAssistant::all();
         return response()->json($assistants);
     }
+    public function showById(Request $request)
+    {
+        $userId = $request->query('user_id');
+        $householdAssistants = HouseholdAssistant::where('user_id', $userId)->first();
+        if ($householdAssistants){
+            return response()->json($householdAssistants);
+        }
+        return response()->json("gak masuk datanya");
+    }
     public function category(Request $request)
     {
         $speciality = $request->query('speciality', 'cleaning');
@@ -24,6 +33,7 @@ class HouseholdAssistantController extends Controller
         return response()->json($assistant);
     }
 
+    
     public function store(Request $request)
     {
         // Validate the request data

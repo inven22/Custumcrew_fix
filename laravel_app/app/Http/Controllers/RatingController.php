@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Rating;
 use Illuminate\Http\Request;
-
+use App\Models\HouseholdAssistant;
+use App\Models\Order;
 class RatingController extends Controller
 {
     public function index()
@@ -38,4 +39,32 @@ class RatingController extends Controller
         }
         return response()->json($rating);
     }
+
+    public function getHouseholdRating($id)
+{
+    // $user = auth()->user(); // Mengambil pengguna yang terautentikasi
+
+    // if (!$user) {
+    //     return response()->json(['error' => 'Unauthorized'], 401);
+    // }
+    // $user = $request->user();
+    $orders = Order::where('household_assistant_id', $id)->get();
+
+    // Collect order ids
+    $orderIds = $orders->pluck('id')->toArray();
+
+    // Retrieve ratings based on collected order ids
+    $ratings = Rating::whereIn('order_id', $orderIds)->get();
+
+    if ($ratings->isEmpty()) {
+        return response()->json(['average_rating' => 0]);
+    }
+
+    $totalRating = $ratings->sum('rating');
+    $averageRating = $totalRating / $ratings->count();
+
+    return response()->json(['average_rating' => $averageRating]);
+}
+
+
 }

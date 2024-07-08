@@ -8,13 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class HouseholdAssistant extends Model
 {
     use HasFactory;
+    
+    protected $fillable = ['user_id', 'name', 'speciality', 'biography', 'order_count'];
 
-    protected $fillable = ['name', 'email', 'phone','speciality'];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function orders()
     {
         return $this->hasMany(Order::class);
     }
 
-    
+    public function ratings()
+    {
+        return $this->hasManyThrough(Rating::class, Order::class);
+
+    }
 }

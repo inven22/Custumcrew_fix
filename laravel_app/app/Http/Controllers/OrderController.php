@@ -10,14 +10,6 @@ class OrderController extends Controller
 {
     public function create(Request $request)
     {
-        // \Log::info('Request data: '. json_encode($request->all()));
-
-        // $request->validate([
-        //     'user_id' => 'required|exists:user_id',
-        //     'household_assistant_id' => 'required|exists:household_assistants,id',
-        //     'service_date' => 'required|date',
-        // ]);
-
         $order = new Order();
         $order->user_id = $request->user_id;
         $order->household_assistant_id = $request->household_assistant_id;
@@ -34,8 +26,18 @@ class OrderController extends Controller
 
     public function getOrders()
     {
-        $orders = Order::select('household_assistant_id', 'service_date')->get();
+        $orders = Order::with('householdAssistant:id,name')
+                   ->select('id', 'household_assistant_id', 'service_date')
+                   ->get()      
+                   ->map(function ($order) {
+                       return [
+                           'id' => $order->id,
+                           'household_assistant_id' => $order->household_assistant_id,
+                           'household_assistant_name' => $order->householdAssistant->name,
+                           'service_date' => $order->service_date,
+                       ];
+                   });
 
-        return response()->json($orders, 200);
+    return response()->json($orders, 200);
     }
 }

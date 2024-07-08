@@ -15,12 +15,12 @@ class CreateHouseholdAssistantsTable extends Migration
     {
         Schema::create('household_assistants', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
             $table->string('speciality');
-            $table->text('biography')->nullable();
-            $table->integer('order')->nullable();
-            $table->string('email')->unique();
-            $table->string('phone');
+            $table->text('biography')->default('');
+            $table->integer('order_count')->default(0);
             $table->timestamps();
         });
     }
