@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../profile/profile.dart';
+import 'package:asistant_rumah/home/screens/profile/profile.dart';
 import 'package:asistant_rumah/home/screens/dashboard/home.dart';
 import 'package:asistant_rumah/home/widgets/text_widget.dart';
 

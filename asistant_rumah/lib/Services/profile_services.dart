@@ -4,6 +4,19 @@ import 'package:asistant_rumah/services/globals.dart';
 import 'package:asistant_rumah/services/token_services.dart';
 
 class ProfileServices {
+  static int? _userId;
+
+  static void setUserId(int userId) {
+    if (userId <= 0) {
+      throw Exception('Invalid userId: $userId');
+    }
+    _userId = userId;
+  }
+
+  static int? getUserId() {
+    return _userId;
+  }
+
   static Future<http.Response> getProfile() async {
     String? token = await TokenServices.getToken();
 

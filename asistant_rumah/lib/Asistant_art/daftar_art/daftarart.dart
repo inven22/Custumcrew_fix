@@ -1,7 +1,8 @@
+import 'package:asistant_rumah/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:asistant_rumah/home/screens/authentication/login_screen.dart';
+// import 'package:asistant_rumah/home/screens/authentication/login_screen.dart';
 import 'package:asistant_rumah/home/screens/dashboard/home.dart';
 
 class daftarart extends StatelessWidget {
@@ -16,7 +17,8 @@ class daftarart extends StatelessWidget {
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide.none,
@@ -25,7 +27,8 @@ class daftarart extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(color: Colors.blueAccent),
           ),
-          labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+          labelStyle:
+              const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
           hintStyle: const TextStyle(color: Colors.grey),
         ),
       ),
@@ -127,7 +130,7 @@ class _SignupFormState extends State<SignupForm> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                        MaterialPageRoute(builder: (context) => MyApp()),
                       );
                     },
                     child: const Text(
@@ -189,7 +192,8 @@ class _SignupFormState extends State<SignupForm> {
         borderRadius: BorderRadius.circular(10.0),
         borderSide: BorderSide(color: Colors.blueAccent),
       ),
-      labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+      labelStyle:
+          const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
       hintStyle: const TextStyle(color: Colors.grey),
       prefixIcon: icon != null ? Icon(icon, color: Colors.grey) : null,
     );

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:asistant_rumah/services/profile_services.dart';
 import 'package:http/http.dart' as http;
 import 'package:asistant_rumah/services/globals.dart';
 import 'package:asistant_rumah/services/token_services.dart';
@@ -38,6 +39,8 @@ class AuthServices {
     if (response.statusCode == 200) {
       Map responseMap = jsonDecode(response.body);
       await TokenServices.setToken(responseMap['token']);
+      int userId = responseMap['user']['id'];
+      ProfileServices.setUserId(userId);
     }
     return response;
   }

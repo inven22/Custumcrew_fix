@@ -10,6 +10,7 @@ class TokenServices {
   static Future<String?> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString("token");
+    print(token);
     return token;
   }
 

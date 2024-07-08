@@ -2,15 +2,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:asistant_rumah/home/widgets/text_widget.dart';
 import 'package:asistant_rumah/home/screens/order/oppointment.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Profile extends StatefulWidget {
-  final AssetImage image;
-  final String name;
-  final String speciality;
-  final String biography;
-  final int order;
-  final String email;
-  final int id;
+  final AssetImage? image;
+  final String? name;
+  final String? speciality;
+  final String? biography;
+  final int? order;
+  final String? email;
+  final int? id;
   const Profile({
     Key? key,
     required this.image,
@@ -30,11 +32,13 @@ class _ProfileState extends State<Profile> {
   var animate = false;
   var opacity = 0.0;
   late Size size;
+  double averageRating = 0.0;
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
+      fetchAverageRating();
       animator();
     });
   }
@@ -48,6 +52,21 @@ class _ProfileState extends State<Profile> {
       animate = false;
     }
     setState(() {});
+  }
+
+  void fetchAverageRating() async {
+    final response = await http
+        .get(Uri.parse('http://127.0.0.1:8000/api/getRatings/${widget.id}'));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        averageRating = data['average_rating'] ??
+            0.0; // Update averageRating state variable
+        print(averageRating);
+      });
+    } else {
+      print('Failed to load average rating');
+    }
   }
 
   @override
@@ -73,7 +92,10 @@ class _ProfileState extends State<Profile> {
                     width: size.width,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: widget.image, fit: BoxFit.cover)),
+                            image: widget.image ??
+                                const AssetImage(
+                                    'assets/placeholder_image.png'),
+                            fit: BoxFit.cover)),
                   ),
                 )),
             AnimatedPositioned(
@@ -90,7 +112,7 @@ class _ProfileState extends State<Profile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextWidget(
-                          widget.name,
+                          widget.name ?? "",
                           25,
                           Colors.black,
                           FontWeight.bold,
@@ -100,7 +122,7 @@ class _ProfileState extends State<Profile> {
                           height: 5,
                         ),
                         TextWidget(
-                          widget.speciality,
+                          widget.speciality ?? "",
                           15,
                           Colors.black.withOpacity(.6),
                           FontWeight.bold,
@@ -147,7 +169,7 @@ class _ProfileState extends State<Profile> {
                                       height: 10,
                                     ),
                                     TextWidget(
-                                      "4,5 from 5",
+                                      "${averageRating.toStringAsFixed(1)} from 5",
                                       23,
                                       Colors.black,
                                       FontWeight.bold,
@@ -200,7 +222,8 @@ class _ProfileState extends State<Profile> {
                                       height: 10,
                                     ),
                                     TextWidget(
-                                      widget.order.toString(),
+                                      widget.order?.toString() ??
+                                          "belum ada yang memesan",
                                       23,
                                       Colors.black,
                                       FontWeight.bold,
@@ -254,7 +277,7 @@ class _ProfileState extends State<Profile> {
                           height: 20,
                         ),
                         TextWidget(
-                          widget.biography,
+                          widget.biography ?? "",
                           15,
                           Colors.black.withOpacity(.5),
                           FontWeight.normal,
@@ -428,7 +451,7 @@ class _ProfileState extends State<Profile> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => Oppointment(
-                                    id: widget.id,
+                                    id: widget.id ?? 0,
                                   )));
                       animator();
                     },

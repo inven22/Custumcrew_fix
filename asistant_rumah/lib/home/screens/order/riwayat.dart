@@ -63,14 +63,10 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
 
   void _moveOrderToHistory(int orderId) {
     setState(() {
-      // Find the order in upcomingOrders
       final order = upcomingOrders
           .firstWhere((order) => order['household_assistant_id'] == orderId);
-      // Remove the order from upcomingOrders
       upcomingOrders.remove(order);
-      // Add the order to historyOrders
       historyOrders.add(order);
-      // Switch to the History tab
       _tabController.index = 1;
     });
   }
@@ -213,6 +209,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                   itemBuilder: (context, index) {
                     final order = upcomingOrders[index];
                     final orderId = order['household_assistant_id'];
+                    final orderName = order['household_assistant_name'];
 
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -240,7 +237,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'ID: $orderId',
+                                        'Name: $orderName',
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -329,7 +326,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                   itemBuilder: (context, index) {
                     final order = historyOrders[index];
                     final orderId = order['household_assistant_id'];
-
+                    final orderName = order['household_assistant_name'];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Card(
@@ -356,7 +353,7 @@ class _RiwayatPesananPageState extends State<RiwayatPesananPage>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'ID: $orderId',
+                                        'Name: $orderName',
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,

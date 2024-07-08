@@ -1,3 +1,4 @@
+import 'package:asistant_rumah/services/household_assistant_services.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:asistant_rumah/home/widgets/setting_item.dart';
@@ -6,6 +7,8 @@ import 'package:asistant_rumah/home/widgets/forward_button.dart';
 import 'package:asistant_rumah/home/screens/profile/edit_screen.dart';
 import 'package:asistant_rumah/home/screens/authentication/login_screen.dart';
 import 'package:asistant_rumah/Asistant_art/daftar_art/daftarart.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -18,11 +21,14 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   String _userName = 'Loading...';
   String _userEmail = '';
+  String _userRole = '';
+  String _speciality = '';
 
   @override
   void initState() {
     super.initState();
     fetchProfile();
+    fetchHouseholdAssistantData();
   }
 
   fetchProfile() async {
@@ -32,6 +38,7 @@ class _AccountScreenState extends State<AccountScreen> {
       setState(() {
         _userName = profileData['user']['name'];
         _userEmail = profileData['user']['email'];
+        _userRole = profileData['user']['role'];
       });
     } catch (e) {
       setState(() {
@@ -40,6 +47,29 @@ class _AccountScreenState extends State<AccountScreen> {
       });
       // ignore: avoid_print
       print('Error fetching profile: $e');
+    }
+  }
+
+  fetchHouseholdAssistantData() async {
+    try {
+      http.Response response =
+          await HouseholdAssistantServices.getHouseholdAssistantData();
+      print("status code:${response.statusCode}");
+      print("ini ii ${jsonDecode(response.body)}");
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> householdData = jsonDecode(response.body);
+        setState(() {
+          _speciality = householdData['speciality'];
+        });
+      } else if (response.statusCode == 404) {
+        throw Exception('Household assistant data not found');
+      } else {
+        throw Exception(
+            'Failed to load household assistant data: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching household assistant data: $e');
     }
   }
 
@@ -88,7 +118,9 @@ class _AccountScreenState extends State<AccountScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _userName,
+                          _userRole == 'household_assistant'
+                              ? '$_userName (assistant)'
+                              : _userName,
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
@@ -97,6 +129,14 @@ class _AccountScreenState extends State<AccountScreen> {
                         const SizedBox(height: 10),
                         Text(
                           _userEmail,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          _speciality,
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.grey,
@@ -151,21 +191,26 @@ class _AccountScreenState extends State<AccountScreen> {
                 iconColor: Colors.red,
                 onTap: () {},
               ),
-               const SizedBox(height: 20),
-              SettingItem(
-                title: "Daftar sebagai Hausehold",
-                icon: Ionicons.notifications,
-                bgColor: Colors.blue.shade100,
-                iconColor: Colors.blue,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const daftarart(),
+              if (_userRole == 'user')
+                Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    SettingItem(
+                      title: "Daftar sebagai Hausehold",
+                      icon: Ionicons.notifications,
+                      bgColor: Colors.blue.shade100,
+                      iconColor: Colors.blue,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const daftarart(),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
+                  ],
+                ),
               const SizedBox(height: 20),
               SettingItem(
                 title: "Logout",
