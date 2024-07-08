@@ -40,4 +40,12 @@ class OrderController extends Controller
 
     return response()->json($orders, 200);
     }
+
+    public function getHouseholdTotalOrder($id)
+    {
+        $totalOrder = Order::where('household_assistant_id', $id)->count();
+
+        return response()->json(['total_order' => $totalOrder]);
+    }
+
 }

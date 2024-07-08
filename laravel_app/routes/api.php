@@ -49,4 +49,5 @@ Route::post('/ratings_store', [RatingController::class, 'store']);
 Route::get('/ratings/{id}', [RatingController::class, 'show']);
 
 Route::get('/getRatings/{id}', [RatingController::class, 'getHouseholdRating']);
-Route::middleware('auth:sanctum')->get('/getRatings/{id}', [RatingController::class, 'getHouseholdRating']);
+// Route::middleware('auth:sanctum')->get('/getRatings/{id}', [RatingController::class, 'getHouseholdRating']);
+Route::get('/getTotalOrder/{id}', [OrderController::class, 'getHouseholdTotalOrder']);
