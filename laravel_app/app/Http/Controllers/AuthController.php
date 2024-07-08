@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HouseholdAssistant;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -63,6 +64,37 @@ class AuthController extends Controller
         }
     }
 
+    public function registerHouseholdAssistant(Request $req)
+{
+    // Validate input
+    $rules = [
+        'speciality' => 'required|string'
+    ];
+    $validator = Validator::make($req->all(), $rules);
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 400);
+    }
+
+    $user = $req->user();
+
+    // Create a new HouseholdAssistant
+    $household_assistant = new HouseholdAssistant();
+    $household_assistant->user_id = $user->id;
+    $household_assistant->name = $user->name;  // Copy the name from User
+    $household_assistant->speciality = $req->speciality;
+    $household_assistant->biography = "hi";
+    // Update user role
+    $user->role = 'household_assistant';
+
+    // Save both the user and household assistant
+    $user->save();
+    $household_assistant->save();
+
+    return response()->json(['message' => 'User registered as household assistant successfully'], 200);
+}
+
+
+
     public function profile(Request $request){
         $user = $request->user();
         try {
@@ -74,5 +106,43 @@ class AuthController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Server Error'], 500);
         }
+    }
+
+    public function updateProfile(Request $req)
+    {
+        $user = $req->user();
+
+        // Validate inputs
+        $rules = [
+            'name' => 'sometimes|required|string',
+            'email' => 'sometimes|required|string|email|unique:users,email,' . $user->id,
+            'password' => 'sometimes|required|string|min:6',
+            'alamat' => 'sometimes|required|string',
+            'phone' => 'sometimes|required|string'
+        ];
+        $validator = Validator::make($req->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        // Update user data
+        if ($req->has('name')) {
+            $user->name = $req->name;
+        }
+        if ($req->has('email')) {
+            $user->email = $req->email;
+        }
+        if ($req->has('password')) {
+            $user->password = Hash::make($req->password);
+        }
+        if ($req->has('alamat')) {
+            $user->alamat = $req->alamat;
+        }
+        if ($req->has('phone')) {
+            $user->phone = $req->phone;
+        }
+        $user->save();
+
+        return response()->json(['user' => $user, 'message' => 'Profile updated successfully'], 200);
     }
 }

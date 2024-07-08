@@ -21,15 +21,13 @@ use App\Http\Controllers\HouseholdAssistantController;
 
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
-
+Route::middleware('auth:sanctum')->post('/register-household-assistant', [AuthController::class, 'registerHouseholdAssistant']);
+Route::middleware('auth:sanctum')->put('/auth/update-profile', [AuthController::class, 'updateProfile']);
 Route::middleware('auth:sanctum')->post('/auth/validate-token', [AuthController::class, 'validateToken']);
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
 Route::middleware('auth:sanctum')->get('/profile', [AuthController::class, 'profile']);
-
 Route::middleware('auth:sanctum')->get('/get-self-household-assistant', [HouseholdAssistantController::class, 'showById']);
 
 Route::get('/household-assistants', [HouseholdAssistantController::class, 'index']);
@@ -40,8 +38,7 @@ Route::put('/household-assistants/{id}', [HouseholdAssistantController::class, '
 Route::delete('/household-assistants/{id}', [HouseholdAssistantController::class, 'destroy']);
 
 Route::post('/orders', [OrderController::class, 'create']);
-Route::get('/getRiwayat', [OrderController::class, 'getOrders']);   
-
+Route::get('/getRiwayat', [OrderController::class, 'getOrders']);  
 Route::get('/getNotifications', [NotificationController::class, 'getNotif']);
 
 Route::get('/ratings', [RatingController::class, 'index']);
@@ -49,5 +46,4 @@ Route::post('/ratings_store', [RatingController::class, 'store']);
 Route::get('/ratings/{id}', [RatingController::class, 'show']);
 
 Route::get('/getRatings/{id}', [RatingController::class, 'getHouseholdRating']);
-// Route::middleware('auth:sanctum')->get('/getRatings/{id}', [RatingController::class, 'getHouseholdRating']);
 Route::get('/getTotalOrder/{id}', [OrderController::class, 'getHouseholdTotalOrder']);

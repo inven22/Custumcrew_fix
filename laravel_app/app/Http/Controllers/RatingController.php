@@ -16,19 +16,24 @@ class RatingController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'order_id' => 'required|exists:orders,id',
-            'rating' => 'required|integer|between:1,5',
-            'comment' => 'nullable|string',
+            'rating' => 'required|numeric|min:1|max:5',
         ]);
 
-        $rating = Rating::create([
-            'order_id' => $validatedData['order_id'],
-            'rating' => $validatedData['rating'],
-            'comment' => $validatedData['comment'],
-        ]);
+        $order = Order::find($request->input('order_id'));
 
-        return response()->json(['message' => 'Rating saved successfully', 'rating' => $rating], 201);
+        if (!$order) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+
+        // Save rating to database
+        $rating = new Rating();
+        $rating->order_id = $request->input('order_id');
+        $rating->rating = $request->input('rating');
+        $rating->save();
+
+        return response()->json(['message' => 'Rating stored successfully'], 200);
     }
 
     public function show($id)
