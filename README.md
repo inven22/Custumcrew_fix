@@ -15,4 +15,7 @@ Cara penginstalan aplikasi dari github :
 Link UI/UX nya
 https://drive.google.com/drive/folders/1BVhFXIfMYqetrO55e0OU9-zCvxRKLiF0?usp=drive_link
 
+Link dokumentasi api 
+https://drive.google.com/file/d/1GOqWuXf2ggwEzGlR_njF-oND_xNc9_uW/view?usp=sharing
+
 
